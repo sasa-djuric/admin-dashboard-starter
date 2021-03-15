@@ -1,0 +1,78 @@
+version: '3'
+services:
+    mysql-db:
+        container_name: mysql-db
+        build: ./db/mysql
+        command: --default-authentication-plugin=mysql_native_password
+        volumes:
+            - mysql-db-volume:/var/lib/mysql
+        ports:
+            - 3306:3306
+        expose:
+          - 3306
+        environment:
+            - MYSQL_DATABASE=main
+            - MYSQL_ROOT_PASSWORD=password
+        security_opt:
+            - seccomp:unconfined
+
+    backend:
+        container_name: health-center_backend
+        restart: always
+        build:
+            context: ./backend
+        volumes:
+            - '/app/node_modules'
+            - ./backend:/app
+        ports:
+            - 3000:3000
+        expose:
+            - 3000
+        depends_on:
+            - mysql-db
+        environment:
+            VIRTUAL_HOST: health-center.sasadjuric.dev/api
+            LETSENCRYPT_HOST: health-center.sasadjuric.dev
+            LETSENCRYPT_EMAIL: djsasa.mail@gmail.com
+
+    # dashboard:
+    #     container_name: health-center_dashboard
+    #     build: ./dashboard
+    #     restart: always
+    #     ports:
+    #         - 9022:3000
+    #     volumes:
+    #         - '/app/node_modules'
+    #         - ./dashboard:/app
+    #     environment:
+    #         VIRTUAL_HOST: health-center.sasadjuric.dev/dashboard
+    #         LETSENCRYPT_HOST: health-center.sasadjuric.dev
+    #         LETSENCRYPT_EMAIL: djsasa.mail@gmail.com
+    #         NODE_ENV: production
+    #     expose:
+    #         - 9022
+
+    # web:
+    #     container_name: health-center_web
+    #     build: ./web-app
+    #     restart: always
+    #     ports:
+    #         - 9020:3000
+    #     volumes:
+    #         - '/app/node_modules'
+    #         - ./web-app:/app
+    #     environment:
+    #         VIRTUAL_HOST: health-center.sasadjuric.dev
+    #         LETSENCRYPT_HOST: health-center.sasadjuric.dev
+    #         LETSENCRYPT_EMAIL: djsasa.mail@gmail.com
+    #         NODE_ENV: production
+    #     expose:
+    #         - 9020
+
+volumes:
+    mysql-db-volume:
+
+# networks:
+#     default:
+#         external:
+#             name: nginx-proxy

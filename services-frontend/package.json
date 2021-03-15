@@ -1,0 +1,30 @@
+{
+	"name": "@startup/services",
+	"version": "1.0.0",
+	"description": "",
+	"main": "lib",
+	"files": [
+		"lib",
+		"package.json"
+	],
+	"dependencies": {
+		"axios": "^0.21.1",
+		"jsonwebtoken": "^8.5.1",
+		"ramda": "^0.27.1"
+	},
+	"peerDependencies": {
+		"react-query-service": "^1.0.1"
+	},
+	"devDependencies": {
+		"@types/jsonwebtoken": "^8.5.0",
+		"msw": "^0.27.0"
+	},
+	"scripts": {
+		"build": "tsc",
+		"dev": "tsc --watch",
+		"link": "npm link ./lib",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Saša Đurić",
+	"license": "ISC"
+}
