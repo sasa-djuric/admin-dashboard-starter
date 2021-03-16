@@ -6,6 +6,7 @@ import { Link, RouteComponentProps } from 'react-router-dom';
 // Components
 import { Button, Card, Divider, PageHeader, Row, Space, Table } from 'antd';
 import Search from 'antd/lib/input/Search';
+import Protected from '@components/protected/protected';
 import confirm from '@components/confirm';
 
 // Assets
@@ -20,6 +21,9 @@ import usersService, { User } from '@startup/services/users';
 // Interfaces
 import { Sorting } from '@startup/services';
 import { TableRow } from '../../interfaces';
+
+// Enums
+import { UsersPermissions } from '@startup/services/users/enums';
 
 // Utils
 import { handleTableChangeSort, debounce } from '../../../../utils';
@@ -47,8 +51,12 @@ const columns = ({ onEdit, onDelete }: any): ColumnsType<TableRow> => [
 		render(text, row, index) {
 			return (
 				<Space size='middle'>
-					<Button icon={<EditOutlined onClick={() => onEdit(row, index)} />} />
-					<Button icon={<DeleteOutlined />} danger={true} onClick={() => onDelete(row, index)} />
+					<Protected permissions={[UsersPermissions.Update]}>
+						<Button icon={<EditOutlined onClick={() => onEdit(row, index)} />} />
+					</Protected>
+					<Protected permissions={[UsersPermissions.Delete]}>
+						<Button icon={<DeleteOutlined />} danger={true} onClick={() => onDelete(row, index)} />
+					</Protected>
 				</Space>
 			);
 		}

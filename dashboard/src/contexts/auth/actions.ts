@@ -1,3 +1,4 @@
+import { AuthenticatedUser } from '@startup/services/users';
 import { Action } from 'src/interfaces';
 
 export enum AuthAction {
@@ -6,7 +7,7 @@ export enum AuthAction {
 	Loading = 'loading'
 }
 
-export function login<T extends any>(payload: T): Action<T> {
+export function login<T extends AuthenticatedUser>(payload: T): Action<T> {
 	return { type: AuthAction.Login, payload };
 }
 

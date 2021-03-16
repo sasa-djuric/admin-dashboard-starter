@@ -1,4 +1,3 @@
-import { Permissions } from '../../roles/types';
 import { ID } from '../../types';
 
 export interface User {
@@ -6,6 +5,6 @@ export interface User {
 	email: string;
 	name: string;
 	profileImage?: string | null;
-	permissions: Array<Partial<Permissions>>;
+	role: ID;
 	isActive: boolean;
 }

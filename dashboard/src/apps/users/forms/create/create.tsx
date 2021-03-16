@@ -22,7 +22,7 @@ interface CreateProps {
 	onSubmit: (promise: Promise<any>) => void;
 }
 
-type CreateUserFormI = User;
+interface CreateUserFormI extends Omit<User, 'permissions'> {}
 
 const CreateUserForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, onSubmit }) => {
 	const { data: user } = useQuery(usersService.queries.getById(id), { enabled: !isNil(id), suspense: true });
@@ -33,7 +33,7 @@ const CreateUserForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, 
 			name: '',
 			email: '',
 			isActive: true,
-			permissions: [],
+			role: '',
 			profileImage: null
 		},
 		validationSchema,
@@ -57,7 +57,7 @@ const CreateUserForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, 
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>
 			<Row gutter={[36, 0]}>
 				<Col style={{ marginLeft: 'auto' }}>
-					<Form.Item label='Active' style={{ marginBottom: 0 }}>
+					<Form.Item label='Active' style={{ marginBottom: '0px' }}>
 						<Switch checked={values.isActive} onChange={is => setFieldValue('isActive', is)} />
 					</Form.Item>
 				</Col>
@@ -73,7 +73,7 @@ const CreateUserForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, 
 				<Input name='email' placeholder='Input user email' value={values.email} onChange={handleChange} />
 			</Form.Item>
 
-			{/* <Form.Item
+			<Form.Item
 				label='User role'
 				style={{ marginBottom: 0 }}
 				validateStatus={errors.role ? 'error' : 'success'}
@@ -87,13 +87,12 @@ const CreateUserForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, 
 						setFieldValue('role', e);
 					}}
 				/>
-			</Form.Item> */}
+			</Form.Item>
 
-			<Row gutter={[16, 24]} style={{ margin: '24px 0' }}>
+			<Row gutter={[16, 24]} style={{ margin: '24px 0px' }}>
 				<Col span={8}>
 					<Form.Item
 						label='Profile image'
-						required
 						validateStatus={errors.profileImage ? 'error' : 'success'}
 						help={errors.profileImage}
 					>

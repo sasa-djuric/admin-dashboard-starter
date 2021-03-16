@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 
 // Components
 import { Avatar, Dropdown, Layout, Menu, Space, Typography } from 'antd';
-import UserMenu from '../user-menu';
+import UserMenu from '../../containers/user-menu';
 
 // Config
 import navigation, { NavigationConfig } from '../../config/navigation';

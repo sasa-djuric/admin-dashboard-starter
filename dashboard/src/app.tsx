@@ -4,7 +4,7 @@ import { useContext } from 'react';
 import { AppRoutes } from './lib/routing';
 
 // Containers
-import AppShell from './containers/app-shell';
+import AppShell from './templates/app-shell';
 import UnauthenticatedApp from './app-unauth';
 
 // Views

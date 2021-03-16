@@ -1,10 +1,10 @@
-import { User } from '@startup/services/users';
+import { AuthenticatedUser } from '@startup/services/users';
 import { Actions, AuthAction } from './actions';
 
 export interface AuthState {
 	isAuth: boolean;
 	isLoading: boolean;
-	user: User | null;
+	user: AuthenticatedUser | null;
 }
 
 export const initialAuthState: AuthState = {

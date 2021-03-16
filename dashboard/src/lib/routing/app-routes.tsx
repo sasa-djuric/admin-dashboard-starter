@@ -1,5 +1,6 @@
 import React, { memo, useMemo } from 'react';
-import { Switch, Redirect, Route, useLocation } from 'react-router';
+import { Switch, Redirect, useLocation } from 'react-router';
+import ProtectedRoute from '@components/protected-route';
 import { App, BaseRoute, Route as RouteI } from 'src/interfaces';
 
 interface RenderAppRoutesProps {
@@ -20,12 +21,13 @@ export const AppRoutes: React.FunctionComponent<RenderAppRoutesProps> = memo(
 
 		return (
 			<Switch>
-				{routes.map(({ component: Component, path, exact, rerenderOnPathChange, ...route }) => {
+				{routes.map(({ component: Component, path, exact, rerenderOnPathChange, permissions, ...route }) => {
 					return (
-						<Route
+						<ProtectedRoute
 							key={rerenderOnPathChange ? location.pathname : path}
 							path={path}
 							exact={exact}
+							permissions={permissions}
 							component={(props: any) => <Component {...props} {...(route.props || {})} />}
 						/>
 					);

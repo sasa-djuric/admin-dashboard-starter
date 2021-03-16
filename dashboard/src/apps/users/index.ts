@@ -4,16 +4,19 @@ import UsersCreateView from './views/create';
 
 // Interfaces
 import { App, Route } from '../../interfaces';
+import { UsersPermissions } from '@startup/services/users/enums';
 
 const routes: Array<Route> = [
 	{
 		path: '/',
 		component: UsersMainView,
-		exact: true
+		exact: true,
+		permissions: [UsersPermissions.Read]
 	},
 	{
 		path: '/new',
-		component: UsersCreateView
+		component: UsersCreateView,
+		permissions: [UsersPermissions.Create]
 	},
 	{
 		path: '/:id/edit',
@@ -21,7 +24,8 @@ const routes: Array<Route> = [
 			isEditMode: true
 		},
 		component: UsersCreateView,
-		exact: true
+		exact: true,
+		permissions: [UsersPermissions.Update]
 	}
 ];
 

@@ -1,7 +1,7 @@
 import { createService } from 'react-query-service';
 import { decode } from 'jsonwebtoken';
 import http from '../http';
-import { User } from '../users';
+import { AuthenticatedUser } from '../users';
 
 export interface LoginRequest {
 	email: string;
@@ -10,7 +10,7 @@ export interface LoginRequest {
 
 export interface LoginResponse {
 	token: string;
-	user: User;
+	user: AuthenticatedUser;
 }
 
 function validateToken(token: string) {

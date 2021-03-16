@@ -3,3 +3,9 @@ export const NotFoundException = (message: string = 'Not found') => {
 		message
 	};
 };
+
+export const UnauthorizedException = (message: string = 'Unauthorized') => {
+	return {
+		message
+	};
+};

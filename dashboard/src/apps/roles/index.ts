@@ -4,16 +4,19 @@ import RolesCreateView from './views/create';
 
 // Interfaces
 import { App, Route } from '../../interfaces';
+import { RolesPermissions } from '@startup/services/roles/enums';
 
 const routes: Array<Route> = [
 	{
 		path: '/',
 		component: RolesMainView,
-		exact: true
+		exact: true,
+		permissions: [RolesPermissions.Read]
 	},
 	{
 		path: '/new',
-		component: RolesCreateView
+		component: RolesCreateView,
+		permissions: [RolesPermissions.Create]
 	},
 	{
 		path: '/:id/edit',
@@ -21,7 +24,8 @@ const routes: Array<Route> = [
 			isEditMode: true
 		},
 		component: RolesCreateView,
-		exact: true
+		exact: true,
+		permissions: [RolesPermissions.Update]
 	}
 ];
 
