@@ -20,9 +20,9 @@ import queryClient from './config/query-client';
 // Contexts
 import AuthProvider from './contexts/auth/auth.context';
 
-if (process.env.NODE_ENV === 'development') {
-	require('@startup/services/mocks').startMockServer();
-}
+// if (process.env.NODE_ENV === 'development') {
+// 	require('@startup/services/mocks').startMockServer();
+// }
 
 init(queryClient);
 

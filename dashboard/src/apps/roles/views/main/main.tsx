@@ -78,7 +78,7 @@ const RolesMainView: FunctionComponent<RolesMainViewProps> = ({ history, match }
 	const [search, setSearch] = useState('');
 	const [page, setPage] = useState(1);
 	const [sort, setSort] = useState<Sorting>();
-	const { data: users, isLoading } = useQuery(
+	const { data: roles, isLoading } = useQuery(
 		rolesService.queries.getAllPaginated({
 			id,
 			search,
@@ -135,12 +135,12 @@ const RolesMainView: FunctionComponent<RolesMainViewProps> = ({ history, match }
 				<Divider />
 				<Table
 					columns={columns({ onEdit, onDelete })}
-					dataSource={users?.data ? mapData(users.data) : []}
+					dataSource={roles?.data ? mapData(roles.data) : []}
 					style={{ overflowX: 'auto' }}
 					loading={isLoading}
 					pagination={{
 						defaultPageSize: 5,
-						total: users?.metadata?.total,
+						total: roles?.metadata?.total,
 						current: page,
 						onChange: setPage
 					}}

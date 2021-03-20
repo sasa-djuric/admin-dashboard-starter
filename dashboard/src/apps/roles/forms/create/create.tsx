@@ -54,7 +54,6 @@ const CreateRoleForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, 
 		validationSchema,
 		validateOnChange: false,
 		onSubmit: values => {
-			console.log({ values });
 			let promise: Promise<any> = Promise.resolve();
 
 			if (!isEditMode) {
@@ -66,6 +65,8 @@ const CreateRoleForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, 
 			if (onSubmit) {
 				onSubmit(promise);
 			}
+
+			return promise;
 		}
 	});
 
