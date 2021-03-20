@@ -1,15 +1,16 @@
 import { BadRequestException, Injectable, InternalServerErrorException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ConfigService } from '@nestjs/config';
+import { MailerService } from '@nestjs-modules/mailer';
 import { compare, genSalt, hash } from 'bcrypt';
-import { UserRepository } from '../users/user.respository';
+import { Repository } from 'typeorm';
 import { sign } from 'jsonwebtoken';
 import { omit } from 'ramda';
-import { LoginDto, ForgotPasswordDto, ResetPasswordDto } from './dto';
+import { UserRepository } from '../users/user.repository';
+import { LoginDto, ForgotPasswordDto, ResetPasswordDto, LoginResponseDto } from './dto';
 import { ForgotPassword } from './forgot-password.entity';
-import { Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
-import { MailerService } from '@nestjs-modules/mailer';
 import { emailTemplate } from '../../mail/template';
-import { ConfigService } from '@nestjs/config';
+import { User } from '../users/user.entity';
 
 @Injectable()
 export class AuthenticationService {
@@ -22,9 +23,9 @@ export class AuthenticationService {
 		private readonly configService: ConfigService
 	) {}
 
-	async login(data: LoginDto) {
+	public async login(data: LoginDto): Promise<LoginResponseDto> {
 		try {
-			const found = await this.userRepository.findOneOrFail({ email: data.email });
+			const found = await this.userRepository.findOneWithPermissions({ email: data.email });
 			const isPasswordValid = await compare(data.password, found.password);
 
 			if (!isPasswordValid) {
@@ -42,7 +43,7 @@ export class AuthenticationService {
 		}
 	}
 
-	async forgotPassword(data: ForgotPasswordDto): Promise<void> {
+	public async forgotPassword(data: ForgotPasswordDto): Promise<void> {
 		try {
 			const found = await this.userRepository.findOne({ email: data.email });
 
@@ -57,25 +58,13 @@ export class AuthenticationService {
 				token
 			});
 
-			const template = emailTemplate('reset-password', {
-				name: found.name,
-				email: found.email,
-				projectName: this.configService.get('project.name'),
-				resetUrl: `${this.configService.get('project.domain')}/reset-password/${token}`
-			});
-
-			await this.mailerService.sendMail({
-				to: 'mail@mail.com',
-				from: 'noreply@x.com',
-				subject: 'test',
-				html: template
-			});
+			await this.sendPasswordResetEmail(found, token);
 		} catch (err) {
 			throw new InternalServerErrorException();
 		}
 	}
 
-	async resetPassword(data: ResetPasswordDto): Promise<void> {
+	public async resetPassword(data: ResetPasswordDto): Promise<void> {
 		try {
 			const found = await this.forgotPasswordRepository.findOneOrFail({ token: data.token });
 			const salt = await genSalt(4);
@@ -86,5 +75,21 @@ export class AuthenticationService {
 		} catch {
 			throw new BadRequestException('Request expired');
 		}
+	}
+
+	private async sendPasswordResetEmail(user: User, token: string): Promise<any> {
+		const template = emailTemplate('reset-password', {
+			name: user.name,
+			email: user.email,
+			projectName: this.configService.get('project.name'),
+			resetUrl: `https://www.${this.configService.get('project.domain')}/reset-password/${token}`
+		});
+
+		return this.mailerService.sendMail({
+			to: 'mail@mail.com',
+			from: `noreply@${this.configService.get('project.domain')}`,
+			subject: 'Password reset request',
+			html: template
+		});
 	}
 }

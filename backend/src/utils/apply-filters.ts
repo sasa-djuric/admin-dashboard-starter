@@ -11,7 +11,7 @@ interface FilterOptions {
 	transform?: (result: any) => void;
 }
 
-export function applyFiltersAndExecute<T = any>(
+export async function applyFiltersAndExecute<T = any>(
 	query: SelectQueryBuilder<any>,
 	filters?: FiltersDto,
 	options: FilterOptions = {}
@@ -34,14 +34,15 @@ export function applyFiltersAndExecute<T = any>(
 	}
 
 	if (shouldPaginate) {
-		return query.getManyAndCount().then(result => {
-			return {
-				metadata: {
-					total: result[1]
-				},
-				data: handleTransform(result[0], options.transform)
-			};
-		});
+		const queryResult = await query.execute();
+		const [countResult] = await query.select('COUNT(1) as total').execute();
+
+		return {
+			metadata: {
+				total: parseInt(countResult.total)
+			},
+			data: handleTransform(queryResult, options.transform)
+		};
 	}
 
 	return query.getMany().then(result => handleTransform(result, options.transform));

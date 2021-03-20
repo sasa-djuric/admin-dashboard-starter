@@ -3,7 +3,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { Test } from '@nestjs/testing';
 import { AuthenticationGuard } from '../../src/guards/authentication.guard';
 import * as request from 'supertest';
-import { AppModule } from '../../src/app.module';
+import { AppModule } from '../../src/modules/app/app.module';
 
 function createTestModule(guard) {
 	return Test.createTestingModule({
@@ -20,13 +20,12 @@ function createTestModule(guard) {
 describe('Authentication Guard', () => {
 	let app: INestApplication;
 
-	it(`should prevent access (unauthorized)`, async () => {
+	beforeEach(async () => {
 		app = (await createTestModule(new AuthenticationGuard())).createNestApplication();
-
 		await app.init();
-		return request(app.getHttpServer())
-			.get('/categories/all')
-			.set('Authorization', 'Bearer test-header')
-			.expect(401);
+	});
+
+	it(`should prevent access (unauthorized)`, async () => {
+		return request(app.getHttpServer()).get('/roles').set('Authorization', 'Bearer test-header').expect(401);
 	});
 });
