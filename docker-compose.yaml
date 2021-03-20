@@ -16,6 +16,14 @@ services:
         security_opt:
             - seccomp:unconfined
 
+    redis:
+        container_name: redis
+        build: ./db/redis
+        volumes:
+            - redis-volume:/data
+        ports:
+            - 6379:6379
+
     backend:
         container_name: health-center_backend
         restart: always
@@ -30,10 +38,11 @@ services:
             - 3000
         depends_on:
             - mysql-db
+            - redis
         environment:
-            VIRTUAL_HOST: health-center.sasadjuric.dev/api
-            LETSENCRYPT_HOST: health-center.sasadjuric.dev
-            LETSENCRYPT_EMAIL: djsasa.mail@gmail.com
+            VIRTUAL_HOST: test.sasadjuric.dev/api
+            LETSENCRYPT_HOST: test.sasadjuric.dev
+            LETSENCRYPT_EMAIL: contact@sasadjuric.dev
 
     # dashboard:
     #     container_name: health-center_dashboard
@@ -71,6 +80,7 @@ services:
 
 volumes:
     mysql-db-volume:
+    redis-volume:
 
 # networks:
 #     default:
