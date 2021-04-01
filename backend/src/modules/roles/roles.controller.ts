@@ -7,6 +7,7 @@ import { RolesPermissions } from './enums';
 import { Role } from './role.entity';
 import { RolesService } from './roles.service';
 import { Cache } from '../../cache/decorators';
+import { ApiParam, ApiQuery } from '@nestjs/swagger';
 
 const TTL = 24 * 60 * 60;
 
@@ -15,8 +16,9 @@ const TTL = 24 * 60 * 60;
 export class RolesController {
 	constructor(private readonly rolesService: RolesService) {}
 
-	@Get()
+	@Get('/')
 	@UseGuards(new PermissionsGuard(RolesPermissions.Read))
+	@ApiQuery({ name: 'filters', required: false })
 	getAll(@Query() filters?: FiltersDto): Promise<WithFilters<Array<Role>>> {
 		return this.rolesService.getAll(filters);
 	}
@@ -24,11 +26,12 @@ export class RolesController {
 	@Get('/:id')
 	@UseGuards(new PermissionsGuard(RolesPermissions.Read))
 	@Cache<any, IdParamDto>('role', ({ params }) => params.id, TTL)
+	@ApiParam({ name: 'id', required: true })
 	getById(@Param() params: IdParamDto): Promise<Role> {
 		return this.rolesService.getById(params.id);
 	}
 
-	@Post()
+	@Post('/')
 	@UseGuards(new PermissionsGuard(RolesPermissions.Create))
 	create(@Body() data: CreateRoleDto): Promise<Role> {
 		return this.rolesService.create(data);
@@ -37,6 +40,7 @@ export class RolesController {
 	@Put('/:id')
 	@UseGuards(new PermissionsGuard(RolesPermissions.Update))
 	@Cache<any, IdParamDto>('role', ({ params }) => params.id, TTL)
+	@ApiParam({ name: 'id', required: true })
 	update(@Param() params: IdParamDto, @Body() data: UpdateRoleDto): Promise<Role> {
 		return this.rolesService.update(params.id, data);
 	}
@@ -44,6 +48,7 @@ export class RolesController {
 	@Delete('/:id')
 	@UseGuards(new PermissionsGuard(RolesPermissions.Delete))
 	@Cache<any, IdParamDto>('role', ({ params }) => params.id, TTL)
+	@ApiParam({ name: 'id', required: true })
 	remove(@Param() params: IdParamDto): Promise<{ id: ID }> {
 		return this.rolesService.remove(params.id);
 	}

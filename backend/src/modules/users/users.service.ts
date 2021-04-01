@@ -10,6 +10,7 @@ import { SwitchRoleDto } from './dto/switch.dto';
 import { PhotosService } from '../photos/photos.service';
 import { Photo } from '../photos/photo.entity';
 import { UpdateResult } from 'typeorm';
+import { ApiQuery } from '@nestjs/swagger';
 
 @Injectable()
 export class UsersService {

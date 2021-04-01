@@ -21,6 +21,7 @@ import { UserResponse } from './interface';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
 import { multerConfig, StorageType } from 'src/config/multer';
+import { ApiParam, ApiQuery } from '@nestjs/swagger';
 
 @Controller('users')
 @UseGuards(AuthenticationGuard)
@@ -28,28 +29,34 @@ export class UsersController {
 	constructor(private readonly usersService: UsersService) {}
 
 	@Get('/')
+	@ApiQuery({ name: 'filters', required: false })
 	getAll(@Query() filters: FiltersDto): Promise<WithFilters<Array<User>>> {
 		return this.usersService.getAll(filters);
 	}
 
 	@Get('/:id')
+	@ApiParam({ name: 'id', required: true })
 	getById(@Param() params: IdParamDto): Promise<User> {
 		return this.usersService.getById(params.id);
 	}
 
 	@Post('/')
 	@UseInterceptors(FileInterceptor('profileImage', multerConfig({ type: StorageType.Photos })))
+	@ApiParam({ name: 'id', required: true })
 	create(@Body() data: CreateDto, @UploadedFile() profileImage: Express.Multer.File): Promise<UserResponse> {
 		return this.usersService.create({ ...data, profileImage });
 	}
 
 	@Put('/:id')
+	@ApiParam({ name: 'id', required: true })
 	@UseInterceptors(FileInterceptor('profileImage', multerConfig({ type: StorageType.Photos })))
+	@ApiParam({ name: 'id', required: true })
 	update(@Param() params: IdParamDto, @Body() data: UpdateDto): Promise<UserResponse> {
 		return this.usersService.update(+params.id, data);
 	}
 
 	@Delete('/:id')
+	@ApiParam({ name: 'id', required: true })
 	remove(@Param() params: IdParamDto): Promise<{ id: ID }> {
 		return this.usersService.remove(params.id);
 	}
