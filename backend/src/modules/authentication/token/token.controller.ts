@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { Cookie } from '../../../decorators';
+import { Cookie } from '../../../core/decorators';
 import { RefreshTokenCookiesDto } from './dto';
 import { TokenService } from './token.service';
 

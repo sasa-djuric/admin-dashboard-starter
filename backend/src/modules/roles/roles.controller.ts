@@ -1,12 +1,12 @@
 import { Controller, Body, Delete, Get, Param, Post, Put, Query, UseGuards } from '@nestjs/common';
-import { AuthenticationGuard, PermissionsGuard } from '../../guards';
-import { FiltersDto, IdParamDto } from '../../dto/';
-import { ID, WithFilters } from '../../types';
+import { AuthenticationGuard, PermissionsGuard } from '../../core/guards';
+import { FiltersDto, IdParamDto } from '../../core/dto';
+import { ID, WithFilters } from '../../core/types';
 import { CreateRoleDto, UpdateRoleDto } from './dto';
 import { RolesPermissions } from './enums';
 import { Role } from './role.entity';
 import { RolesService } from './roles.service';
-import { Cache } from '../../cache/decorators';
+import { Cache } from '../../core/cache/decorators';
 import { ApiParam, ApiQuery } from '@nestjs/swagger';
 
 const TTL = 24 * 60 * 60;

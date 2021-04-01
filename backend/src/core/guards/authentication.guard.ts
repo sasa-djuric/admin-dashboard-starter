@@ -1,6 +1,6 @@
 import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, Inject } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { TokenService } from '../modules/authentication/token/token.service';
+import { TokenService } from '../../modules/authentication/token/token.service';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {

@@ -8,10 +8,10 @@ import { omit } from 'ramda';
 import { UserRepository } from '../users/user.repository';
 import { LoginDto, ForgotPasswordDto, ResetPasswordDto, LoginResponseDto, ActivationDto } from './dto';
 import { ForgotPassword } from './forgot-password.entity';
-import { emailTemplate } from '../../mail/template';
+import { emailTemplate } from '../../core/mail/template';
 import { User } from '../users/user.entity';
 import { TokenService } from './token/token.service';
-import { ID } from '../../types';
+import { ID } from '../../core/types';
 import { Activation } from './activation.entity';
 
 @Injectable()

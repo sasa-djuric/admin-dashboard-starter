@@ -1,4 +1,4 @@
-import { ID } from 'src/types';
+import { ID } from 'src/core/types';
 import {
 	Column,
 	CreateDateColumn,

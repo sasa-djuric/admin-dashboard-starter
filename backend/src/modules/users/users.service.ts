@@ -1,7 +1,7 @@
 import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
-import { ID, WithFilters } from '../../types';
+import { ID, WithFilters } from '../../core/types';
 import { CreateDto, UpdateDto } from './dto';
 import { User } from './user.entity';
 import { UserResponse, UserWithPermissions } from './interface';

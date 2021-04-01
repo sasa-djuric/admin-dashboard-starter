@@ -1,7 +1,7 @@
 import { EntityRepository, Repository } from 'typeorm';
-import { FiltersDto } from '../../dto/filters.dto';
-import { WithFilters } from '../../types';
-import { applyFiltersAndExecute } from '../../utils';
+import { FiltersDto } from '../../core/dto/filters.dto';
+import { WithFilters } from '../../core/types';
+import { applyFiltersAndExecute } from '../../core/utils';
 import { Role } from './role.entity';
 
 @EntityRepository(Role)

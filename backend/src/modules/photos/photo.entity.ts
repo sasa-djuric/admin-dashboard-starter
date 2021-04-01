@@ -1,4 +1,4 @@
-import { ID } from '../../types';
+import { ID } from '../../core/types';
 import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()

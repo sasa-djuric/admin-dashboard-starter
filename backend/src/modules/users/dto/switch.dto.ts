@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsNotEmpty } from 'class-validator';
-import { ID } from 'src/types';
+import { ID } from 'src/core/types';
 
 export class SwitchRoleDto {
 	@ApiProperty()

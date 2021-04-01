@@ -1,32 +1,32 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
 import { AppService } from './app.service';
-import { Role } from '../roles/role.entity';
+import { Role } from './modules/roles/role.entity';
 
 // Modules
 import { MailerModule } from '@nestjs-modules/mailer';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { AuthenticationModule } from '../authentication/authentication.module';
-import { UsersModule } from '../users/users.module';
-import { UsersService } from '../users/users.service';
-import { UserRepository } from '../users/user.repository';
-import { RolesModule } from '../roles/roles.module';
+import { AuthenticationModule } from './modules/authentication/authentication.module';
+import { UsersModule } from './modules/users/users.module';
+import { UsersService } from './modules/users/users.service';
+import { UserRepository } from './modules/users/user.repository';
+import { RolesModule } from './modules/roles/roles.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 
 // Config
 import { appConfig } from 'src/config/app';
-import { dbConfig } from '../../config/providers/main-db.config';
-import { mailConfig } from '../../config/mail';
-import { redisConfig } from '../../config/providers/redis.config';
-import { projectConfig } from '../../config/project';
-import { authenticationConfig } from '../../config/authentication';
+import { dbConfig } from './config/providers/main-db.config';
+import { mailConfig } from './config/mail';
+import { redisConfig } from './config/providers/redis.config';
+import { projectConfig } from './config/project';
+import { authenticationConfig } from './config/authentication';
 
 // Middlewares
-import { CurrentUserMiddleware } from 'src/middlewares/current-user.middleware';
-import { CacheModule } from 'src/cache/cache.module';
+import { CurrentUserMiddleware } from 'src/core/middlewares/current-user.middleware';
+import { CacheModule } from 'src/core/cache/cache.module';
 import { RedisModule } from 'nestjs-redis';
-import { RolesService } from '../roles/roles.service';
-import { PhotosModule } from '../photos/photos.module';
+import { RolesService } from './modules/roles/roles.service';
+import { PhotosModule } from './modules/photos/photos.module';
 
 // Utils
 import { join } from 'path';
@@ -54,7 +54,7 @@ import { join } from 'path';
 			inject: [ConfigService]
 		}),
 		ServeStaticModule.forRoot({
-			rootPath: join(__dirname, '../../../public')
+			rootPath: join(__dirname, '../public')
 		}),
 		TypeOrmModule.forFeature([Role, UserRepository]),
 		AuthenticationModule,

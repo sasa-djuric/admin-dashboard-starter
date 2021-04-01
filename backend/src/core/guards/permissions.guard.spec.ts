@@ -1,5 +1,5 @@
 import { setupContextRequest } from '../utils/test';
-import { RolesPermissions } from '../modules/roles/enums';
+import { RolesPermissions } from '../../modules/roles/enums';
 import { PermissionsGuard } from './permissions.guard';
 
 describe('PermissionsGuard', () => {

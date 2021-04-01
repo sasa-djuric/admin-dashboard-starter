@@ -5,7 +5,7 @@ import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { ProjectConfig } from 'src/config/project';
 import { StorageType } from '../../config/multer';
-import { ID } from '../../types';
+import { ID } from '../../core/types';
 
 type UpdateCriteria = {
 	[Key in keyof Photo]?: Photo[Key];

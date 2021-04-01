@@ -3,7 +3,7 @@ import { decode } from 'jsonwebtoken';
 import { RedisService } from 'nestjs-redis';
 import { Role } from 'src/modules/roles/role.entity';
 import { RolesService } from 'src/modules/roles/roles.service';
-import { AuthToken } from '../modules/authentication/interfaces/auth-token.interface';
+import { AuthToken } from '../../modules/authentication/interfaces/auth-token.interface';
 
 @Injectable()
 export class CurrentUserMiddleware implements NestMiddleware {

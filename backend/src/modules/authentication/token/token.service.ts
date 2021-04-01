@@ -1,7 +1,7 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { RedisService } from 'nestjs-redis';
 import { sign, TokenExpiredError, verify } from 'jsonwebtoken';
-import { ID } from '../../../types';
+import { ID } from '../../../core/types';
 import { v4 as uuid } from 'uuid';
 import { AuthUser } from '../interfaces';
 import { UsersService } from '../../users/users.service';

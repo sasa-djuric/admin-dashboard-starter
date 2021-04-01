@@ -13,9 +13,9 @@ import {
 	UseInterceptors
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FiltersDto, IdParamDto } from 'src/dto';
-import { AuthenticationGuard } from 'src/guards';
-import { ID, WithFilters } from 'src/types';
+import { FiltersDto, IdParamDto } from 'src/core/dto';
+import { AuthenticationGuard } from 'src/core/guards';
+import { ID, WithFilters } from 'src/core/types';
 import { CreateDto, UpdateDto, SwitchRoleDto } from './dto';
 import { UserResponse } from './interface';
 import { User } from './user.entity';

@@ -3,8 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AppConfig } from 'src/config/app';
 import { Repository } from 'typeorm';
-import { Role } from '../roles/role.entity';
-import { UserRepository } from '../users/user.repository';
+import { Role } from './modules/roles/role.entity';
+import { UserRepository } from './modules/users/user.repository';
 
 @Injectable()
 export class AppService {

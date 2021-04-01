@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, IsBoolean, IsOptional } from 'class-validator';
-import { Permissions } from 'src/types';
+import { Permissions } from 'src/core/types';
 
 export class UpdateRoleDto {
 	@ApiProperty()
