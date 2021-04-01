@@ -1,5 +1,14 @@
 version: '3'
 services:
+    nginx-proxy:
+        image: jwilder/nginx-proxy
+        ports:
+            - 80:80
+        expose:
+            - 80
+        volumes:
+            - /var/run/docker.sock:/tmp/docker.sock:ro
+
     mysql-db:
         container_name: mysql-db
         build: ./db/mysql
@@ -11,8 +20,8 @@ services:
         expose:
           - 3306
         environment:
-            - MYSQL_DATABASE=main
-            - MYSQL_ROOT_PASSWORD=password
+            MYSQL_DATABASE: main
+            MYSQL_ROOT_PASSWORD: password
         security_opt:
             - seccomp:unconfined
 
@@ -40,49 +49,27 @@ services:
             - mysql-db
             - redis
         environment:
-            VIRTUAL_HOST: test.sasadjuric.dev/api
-            LETSENCRYPT_HOST: test.sasadjuric.dev
-            LETSENCRYPT_EMAIL: contact@sasadjuric.dev
+            VIRTUAL_HOST: api.app.com
+            VIRTUAL_PORT: 3000
 
     # dashboard:
     #     container_name: health-center_dashboard
     #     build: ./dashboard
     #     restart: always
+    #     stdin_open: true
     #     ports:
-    #         - 9022:3000
+    #         - 3001:3001
     #     volumes:
     #         - '/app/node_modules'
     #         - ./dashboard:/app
     #     environment:
-    #         VIRTUAL_HOST: health-center.sasadjuric.dev/dashboard
-    #         LETSENCRYPT_HOST: health-center.sasadjuric.dev
-    #         LETSENCRYPT_EMAIL: djsasa.mail@gmail.com
-    #         NODE_ENV: production
+    #         NODE_ENV: development
+    #         CHOKIDAR_USEPOLLING: 'true'
+    #         VIRTUAL_HOST: app.com
+    #         VIRTUAL_PORT: 3001
     #     expose:
-    #         - 9022
-
-    # web:
-    #     container_name: health-center_web
-    #     build: ./web-app
-    #     restart: always
-    #     ports:
-    #         - 9020:3000
-    #     volumes:
-    #         - '/app/node_modules'
-    #         - ./web-app:/app
-    #     environment:
-    #         VIRTUAL_HOST: health-center.sasadjuric.dev
-    #         LETSENCRYPT_HOST: health-center.sasadjuric.dev
-    #         LETSENCRYPT_EMAIL: djsasa.mail@gmail.com
-    #         NODE_ENV: production
-    #     expose:
-    #         - 9020
+    #         - 3001
 
 volumes:
     mysql-db-volume:
     redis-volume:
-
-# networks:
-#     default:
-#         external:
-#             name: nginx-proxy

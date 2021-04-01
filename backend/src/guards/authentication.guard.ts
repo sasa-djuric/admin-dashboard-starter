@@ -1,25 +1,20 @@
-import { Injectable, CanActivate, ExecutionContext, UnauthorizedException } from '@nestjs/common';
+import { Injectable, CanActivate, ExecutionContext, UnauthorizedException, Inject } from '@nestjs/common';
 import { Observable } from 'rxjs';
-import { verify } from 'jsonwebtoken';
+import { TokenService } from '../modules/authentication/token/token.service';
 
 @Injectable()
 export class AuthenticationGuard implements CanActivate {
-	constructor() {}
+	constructor(@Inject('TokenService') private readonly tokenService: TokenService) {}
 
 	canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
 		const request = context.switchToHttp().getRequest();
 		const token = request.headers.authorization?.replace(/bearer /gi, '');
+		const isValid = this.tokenService.validateAccessToken(token);
 
-		return this.validate(token);
-	}
-
-	validate(token: any) {
-		const jwtSecret = process.env.JWT_SECRET;
-
-		try {
-			return !!verify(token, jwtSecret);
-		} catch {
+		if (!isValid) {
 			throw new UnauthorizedException();
 		}
+
+		return true;
 	}
 }

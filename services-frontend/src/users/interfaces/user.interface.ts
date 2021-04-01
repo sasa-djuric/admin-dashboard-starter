@@ -5,6 +5,6 @@ export interface User {
 	email: string;
 	name: string;
 	profileImage?: string | null;
-	role: ID;
+	roleId: ID;
 	isActive: boolean;
 }

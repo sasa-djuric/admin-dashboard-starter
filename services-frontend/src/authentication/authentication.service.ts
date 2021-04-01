@@ -1,7 +1,7 @@
 import { createService } from 'react-query-service';
 import { decode } from 'jsonwebtoken';
-import http from '../http';
 import { AuthenticatedUser } from '../users';
+import http from '../http';
 
 export interface LoginRequest {
 	email: string;
@@ -61,16 +61,29 @@ export interface ForgotPasswordRequest {
 }
 
 function forgotPassword(data: ForgotPasswordRequest) {
-	return http.post('/authentication/forgot-password', data);
+	return http.post('/authentication/password/forgot', data);
 }
 
-interface ResetPasswordRequest {
+export interface ResetPasswordRequest {
 	password: string;
 	token: string;
 }
 
 function resetPassword(data: ResetPasswordRequest) {
-	return http.post('/authentication/reset-password', data);
+	return http.post('/authentication/password/reset', data);
+}
+
+export interface ActivationRequest {
+	password: string;
+	token: string;
+}
+
+function activation(data: ActivationRequest) {
+	return http.post('/authentication/activation', data);
+}
+
+function refreshAccessToken() {
+	return http.get<string>('/token/refresh');
 }
 
 const authenticationService = createService({
@@ -80,7 +93,9 @@ const authenticationService = createService({
 		loginWithToken,
 		logout,
 		forgotPassword,
-		resetPassword
+		resetPassword,
+		activation,
+		refreshAccessToken
 	}
 });
 

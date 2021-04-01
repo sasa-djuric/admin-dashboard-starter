@@ -1,5 +1,6 @@
-import Axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import Axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import api from './config/api';
+import { ErrorCode } from './errors/enums';
 
 type Response<T> = T;
 
@@ -16,12 +17,28 @@ interface Instance extends AxiosInstance {
 
 interface Config {
 	baseURL: string;
-	token: string | null;
+	token?: string | null;
 }
 
 const config: Config = {
-	baseURL: api.baseURL,
-	token: null
+	baseURL: api.baseURL
+};
+
+const axios: Instance = Axios.create();
+
+enum Event {
+	Unauthorized = 'UNAUTHORIZED',
+	TokenRefresh = 'TOKEN_REFRESH'
+}
+
+interface EventMap {
+	[Event.Unauthorized]: (() => any) | null;
+	[Event.TokenRefresh]: (() => any) | null;
+}
+
+const eventListeners: Record<Event, EventMap[Event]> = {
+	[Event.Unauthorized]: null,
+	[Event.TokenRefresh]: null
 };
 
 function _extendData(config: AxiosRequestConfig, extend: Object) {
@@ -51,7 +68,54 @@ function _handleResponse(response: AxiosResponse<any>) {
 	return response?.data;
 }
 
-function _handleError(error: any) {
+function _onUnauthorizedError(error: AxiosError) {
+	const unauthorizedHandler = eventListeners[Event.Unauthorized];
+
+	if (unauthorizedHandler) {
+		return unauthorizedHandler();
+	}
+
+	return Promise.reject(error?.response?.data);
+}
+
+let lastTokenError: string | null;
+
+async function _onTokenExpired(error: AxiosError) {
+	try {
+		const currentError = JSON.stringify(error);
+		const refreshHandler = eventListeners[Event.TokenRefresh];
+
+		if (lastTokenError === currentError || !refreshHandler) {
+			throw new Error();
+		}
+
+		lastTokenError = currentError;
+
+		if (refreshHandler) {
+			const token = await refreshHandler();
+
+			setToken(token);
+
+			const retryResponse = await axios.request(error.config);
+
+			lastTokenError = null;
+
+			return retryResponse;
+		} else {
+			throw new Error();
+		}
+	} catch (err) {
+		return _onUnauthorizedError(error);
+	}
+}
+
+async function _handleError(error: AxiosError) {
+	if (error.response?.data?.code === ErrorCode.TokenExpired) {
+		return _onTokenExpired(error);
+	} else if (error.response?.status === 401) {
+		return _onUnauthorizedError(error);
+	}
+
 	return Promise.reject(error?.response?.data);
 }
 
@@ -63,14 +127,12 @@ function removeToken() {
 	config.token = null;
 }
 
-function setup() {
-	const axios: Instance = Axios.create();
-
-	axios.defaults.baseURL = config.baseURL;
-	axios.interceptors.request.use(_requestInterceptor);
-	axios.interceptors.response.use(_handleResponse, _handleError);
-
-	return { ...axios, setToken, removeToken };
+function addListener<T extends Event>(event: T, listener: EventMap[T]) {
+	eventListeners[event] = listener;
 }
 
-export default setup();
+axios.defaults.baseURL = config.baseURL;
+axios.interceptors.request.use(_requestInterceptor);
+axios.interceptors.response.use(_handleResponse, _handleError);
+
+export default { ...axios, setToken, removeToken, addListener, Event };

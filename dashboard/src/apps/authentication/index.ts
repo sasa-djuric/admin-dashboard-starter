@@ -3,7 +3,7 @@ import { App, Route } from 'src/interfaces';
 // Views
 import LoginView from './views/login';
 import ForgotPasswordView from './views/forgot-password-view';
-import ResetPasswordView from './views/reset-password-view';
+import CreatePasswordView from './views/create-password-view';
 
 const routes: Array<Route> = [
 	{
@@ -16,7 +16,17 @@ const routes: Array<Route> = [
 	},
 	{
 		path: '/reset-password/:token',
-		component: ResetPasswordView
+		component: CreatePasswordView,
+		props: {
+			type: 'reset'
+		}
+	},
+	{
+		path: '/activation/:token',
+		component: CreatePasswordView,
+		props: {
+			type: 'activation'
+		}
 	}
 ];
 

@@ -21,10 +21,8 @@ interface CreateProps extends RouteComponentProps<Params> {
 const UsersCreateView: React.FunctionComponent<CreateProps> = ({ isEditMode, history, match }) => {
 	const id = match.params.id ? +match.params.id : null;
 
-	function onSubmit(promise: Promise<any>) {
-		promise.then(() => {
-			history.goBack();
-		});
+	function onSuccess() {
+		history.goBack();
 	}
 
 	return (
@@ -39,7 +37,7 @@ const UsersCreateView: React.FunctionComponent<CreateProps> = ({ isEditMode, his
 			<Card>
 				<ErrorBoundary>
 					<Suspense fallback={<Spinner />}>
-						<CreateUserForm id={id} isEditMode={!!isEditMode} onSubmit={onSubmit} />
+						<CreateUserForm id={id} isEditMode={!!isEditMode} onSuccess={onSuccess} />
 					</Suspense>
 				</ErrorBoundary>
 			</Card>

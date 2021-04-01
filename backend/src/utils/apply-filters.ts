@@ -45,5 +45,5 @@ export async function applyFiltersAndExecute<T = any>(
 		};
 	}
 
-	return query.getMany().then(result => handleTransform(result, options.transform));
+	return query.execute().then(result => handleTransform(result, options.transform));
 }

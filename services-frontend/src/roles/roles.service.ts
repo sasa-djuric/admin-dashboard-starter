@@ -3,7 +3,7 @@ import { createService } from 'react-query-service';
 
 // Types
 import { ID, WithFilters } from '../types';
-import { ResponseWithPagination } from '../interfaces';
+import { ResponseWithPagination, Search, Sorting } from '../interfaces';
 import { Role } from './interfaces';
 
 // Utils
@@ -11,8 +11,8 @@ import { omit } from 'ramda';
 
 import http from '../http';
 
-function getAll() {
-	return http.get<Array<Role>>('/roles');
+function getAll(filters?: Partial<Sorting & Search>) {
+	return http.get<Array<Role>>('/roles', { params: filters });
 }
 
 function getAllPaginated(filters: WithFilters<any>) {

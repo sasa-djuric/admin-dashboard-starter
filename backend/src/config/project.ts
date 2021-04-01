@@ -2,10 +2,15 @@ import { registerAs } from '@nestjs/config';
 
 export interface ProjectConfig {
 	name: string;
-	domian: string;
+	domain: string;
+	url: string;
 }
 
-export const projectConfig = registerAs('project', () => ({
-	name: process.env.PROJECT_NAME,
-	domain: process.env.PROJECT_DOMAIN
-}));
+export const projectConfig = registerAs(
+	'project',
+	(): ProjectConfig => ({
+		name: process.env.PROJECT_NAME,
+		domain: process.env.PROJECT_DOMAIN,
+		url: process.env.PROJECT_URL
+	})
+);

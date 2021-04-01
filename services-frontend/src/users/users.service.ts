@@ -3,16 +3,17 @@ import { createService } from 'react-query-service';
 
 // Types
 import { ID, WithFilters } from '../types';
-import { ResponseWithPagination } from '../interfaces';
+import { ResponseWithPagination, Search, Sorting } from '../interfaces';
 import { User } from './interfaces';
 
 // Utils
 import { omit } from 'ramda';
+import { toFormData } from '../utils';
 
 import http from '../http';
 
-function getAll() {
-	return http.get<Array<User>>('/users');
+function getAll(filters?: Partial<Search & Sorting>) {
+	return http.get<Array<User>>('/users', { params: filters });
 }
 
 function getAllPaginated(filters: WithFilters<any>) {
@@ -24,15 +25,24 @@ function getById(id: ID) {
 }
 
 function create(data: Omit<User, 'id'>) {
-	return http.post<User>('/users', data);
+	return http.post<User>('/users', toFormData(data));
 }
 
 function update(data: Partial<User>) {
-	return http.put<User>(`/users/${data.id}`, omit(['id'], data));
+	return http.put<User>(`/users/${data.id}`, toFormData(omit(['id'], data)));
 }
 
 function remove(id: ID) {
 	return http.delete<{ id: ID }>(`/users/${id}`);
+}
+
+interface SwithRoleRequest {
+	id: ID;
+	roleId: ID;
+}
+
+function swithRole(data: SwithRoleRequest) {
+	return http.post('/users/role/switch', data);
 }
 
 export const usersService = createService({
@@ -65,6 +75,13 @@ export const usersService = createService({
 			mutationFn: remove,
 			onSuccess: (result: any) => {
 				usersService.queries.getById(result?.id).invalidate();
+				usersService.queries.getAll().invalidate();
+				usersService.queries.getAllPaginated().invalidate();
+			}
+		},
+		swithRole: {
+			mutationFn: swithRole,
+			onSuccess: () => {
 				usersService.queries.getAll().invalidate();
 				usersService.queries.getAllPaginated().invalidate();
 			}

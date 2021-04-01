@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
 
 @Entity()
 export class Role {
@@ -8,9 +8,15 @@ export class Role {
 	@Column({ unique: true, nullable: false })
 	name: string;
 
-	@Column('boolean', { nullable: false })
-	isActive: boolean;
-
 	@Column('json', { nullable: false })
 	permissions: Array<string>;
+
+	@Column('boolean', { nullable: true })
+	isActive: boolean;
+
+	@CreateDateColumn({ type: 'timestamp' })
+	createdAt: Date;
+
+	@UpdateDateColumn({ type: 'timestamp' })
+	updatedAt: Date;
 }

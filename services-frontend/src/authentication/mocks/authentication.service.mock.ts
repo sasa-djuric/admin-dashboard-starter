@@ -34,7 +34,7 @@ const login = rest.post<LoginRequest>(`${api.baseURL}/authentication/login`, (re
 	);
 });
 
-const forgotPasssword = rest.post(`${api.baseURL}/authentication/forgot-password`, (req, res, ctx) => {
+const forgotPasssword = rest.post(`${api.baseURL}/authentication/password/forgot`, (req, res, ctx) => {
 	return res(
 		ctx.delay(RESPONSE_DELAY),
 		ctx.json({})
@@ -43,7 +43,7 @@ const forgotPasssword = rest.post(`${api.baseURL}/authentication/forgot-password
 	);
 });
 
-const resetPasssword = rest.post(`${api.baseURL}/authentication/reset-password`, (req, res, ctx) => {
+const resetPasssword = rest.post(`${api.baseURL}/authentication/password/reset`, (req, res, ctx) => {
 	return res(
 		ctx.delay(RESPONSE_DELAY),
 		ctx.json({})

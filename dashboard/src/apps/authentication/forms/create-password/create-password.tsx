@@ -7,37 +7,49 @@ import { omit } from 'ramda';
 import { LockOutlined } from '@ant-design/icons';
 
 // Services
-import authenticationService from '@startup/services/authentication';
+import authenticationService, { ResetPasswordRequest } from '@startup/services/authentication';
 
 // Config
 import validationSchema from './validation.schema';
 
 interface ResetPasswordProps {
+	type: 'activation' | 'reset';
 	token: string;
 	onSuccess: Function;
 }
 
-const ResetPasswordForm: React.FunctionComponent<ResetPasswordProps> = ({ token, onSuccess }) => {
-	const { handleChange, handleSubmit, values, errors, isSubmitting } = useFormik({
+interface CreatePasswordFormI extends ResetPasswordRequest {
+	passwordRepeat: string;
+}
+
+const CreatePasswordForm: React.FunctionComponent<ResetPasswordProps> = ({ type, token, onSuccess }) => {
+	const { handleChange, handleSubmit, values, errors, isSubmitting } = useFormik<CreatePasswordFormI>({
 		initialValues: {
 			password: '',
-			passwordRepeat: ''
+			passwordRepeat: '',
+			token
 		},
 		validationSchema,
 		validateOnChange: false,
 		onSubmit: values => {
-			return authenticationService
-				.resetPassword({ ...omit(['passwordRepeat'], values), token })
-				.then(result => {
+			const requests = {
+				reset: authenticationService.resetPassword,
+				activation: authenticationService.activation
+			};
+			const requestMethod = requests[type];
+
+			return requestMethod({ ...omit(['passwordRepeat'], values), token }).then(
+				result => {
 					if (onSuccess) {
 						onSuccess();
 					}
-				})
-				.catch(err => {
+				},
+				err => {
 					notification.error({
 						message: err.message
 					});
-				});
+				}
+			);
 		}
 	});
 
@@ -70,4 +82,4 @@ const ResetPasswordForm: React.FunctionComponent<ResetPasswordProps> = ({ token,
 	);
 };
 
-export default ResetPasswordForm;
+export default CreatePasswordForm;

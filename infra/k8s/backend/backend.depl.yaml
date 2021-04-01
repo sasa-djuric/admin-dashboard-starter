@@ -18,3 +18,20 @@ spec:
                   imagePullPolicy: Never
                   ports:
                       - containerPort: 3000
+                  env:
+                    - name: NODE_ENV
+                      value: production
+                      
+                    - name: MAIN_DATABASE_HOST
+                      value: main-db
+                    - name: MAIN_DATABASE_USERNAME
+                      value: root
+                    - name: MAIN_DATABASE_PASSWORD
+                      value: password
+                    - name: MAIN_DATABASE
+                      value: main
+
+                    - name: REDIS_HOST
+                      value: redis
+                    - name: REDIS_PORT
+                      value: '6379'

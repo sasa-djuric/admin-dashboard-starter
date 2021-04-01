@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { ID } from 'src/types';
+import { Column, CreateDateColumn, Entity, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { User } from '../users/user.entity';
 
 @Entity()
 export class ForgotPassword {
@@ -6,11 +8,15 @@ export class ForgotPassword {
 	id: number;
 
 	@Column()
-	email: string;
+	@OneToOne(() => User)
+	userId: ID;
 
 	@Column()
 	token: string;
 
-	@CreateDateColumn()
-	timestamp: string;
+	@CreateDateColumn({ type: 'timestamp' })
+	createdAt: Date;
+
+	@UpdateDateColumn({ type: 'timestamp' })
+	updatedAt: Date;
 }

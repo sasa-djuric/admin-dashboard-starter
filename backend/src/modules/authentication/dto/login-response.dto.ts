@@ -1,6 +1,6 @@
-import { AuthUser } from '../interfaces';
+import { User } from 'src/modules/users/user.entity';
 
 export class LoginResponseDto {
-	user: AuthUser;
+	user: Omit<User, 'password'>;
 	token: string;
 }

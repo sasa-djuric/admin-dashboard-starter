@@ -5,7 +5,8 @@ import '../node_modules/antd/dist/antd.css';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClientProvider, ReactQueryDevtools } from 'react-query-service';
-import { init } from '@startup/services';
+import { init, http } from '@startup/services';
+import authenticationService from '@startup/services/authentication';
 
 // Components
 import { Spin } from 'antd';
@@ -25,6 +26,18 @@ import AuthProvider from './contexts/auth/auth.context';
 // }
 
 init(queryClient);
+
+http.addListener(http.Event.TokenRefresh, () =>
+	authenticationService.refreshAccessToken().then(
+		token => {
+			localStorage.setItem('token', token);
+			return token;
+		},
+		err => {
+			localStorage.removeItem('token');
+		}
+	)
+);
 
 Spin.setDefaultIndicator(<LoadingOutlined />);
 

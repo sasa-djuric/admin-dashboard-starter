@@ -1,4 +1,14 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ID } from 'src/types';
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	ManyToOne,
+	OneToOne,
+	PrimaryGeneratedColumn,
+	UpdateDateColumn
+} from 'typeorm';
+import { Photo } from '../photos/photo.entity';
 import { Role } from '../roles/role.entity';
 
 @Entity()
@@ -9,12 +19,29 @@ export class User {
 	@Column()
 	email: string;
 
-	@Column()
+	@Column({ select: false, default: null })
 	password: string;
 
 	@Column()
 	name: string;
 
 	@ManyToOne(() => Role)
-	role: number;
+	@Column()
+	roleId: ID;
+
+	@Column({ nullable: true, default: null })
+	@OneToOne(() => Photo)
+	profileImageId: ID;
+
+	@Column({ type: 'boolean', default: true })
+	isActive: boolean;
+
+	@Column({ type: 'boolean', default: false })
+	isActivated: boolean;
+
+	@CreateDateColumn({ type: 'timestamp' })
+	createdAt: Date;
+
+	@UpdateDateColumn({ type: 'timestamp' })
+	updatedAt: Date;
 }

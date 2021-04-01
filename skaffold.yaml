@@ -16,3 +16,8 @@ build:
               manual:
                   - src: 'src/**/*.js'
                     dest: .
+
+        - image: startup/redis
+          context: db/redis
+          docker:
+              dockerfile: Dockerfile

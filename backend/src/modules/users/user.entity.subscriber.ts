@@ -13,12 +13,14 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
 	}
 
 	async beforeInsert(event: InsertEvent<User>) {
-		event.entity.password = await hash(event.entity.password, 5);
+		if (event.entity.password) {
+			event.entity.password = await hash(event.entity.password, 10);
+		}
 	}
 
 	async beforeUpdate(event: UpdateEvent<User>) {
-		if (event.entity.password !== event.databaseEntity.password) {
-			event.entity.password = await hash(event.entity.password, 5);
+		if (event.entity.password) {
+			event.entity.password = await hash(event.entity.password, 10);
 		}
 	}
 }
