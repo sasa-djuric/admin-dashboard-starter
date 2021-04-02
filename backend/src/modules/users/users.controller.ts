@@ -50,8 +50,12 @@ export class UsersController {
 	@ApiParam({ name: 'id', required: true })
 	@UseInterceptors(FileInterceptor('profileImage', multerConfig({ type: StorageType.Photos })))
 	@ApiParam({ name: 'id', required: true })
-	update(@Param() params: IdParamDto, @Body() data: UpdateDto): Promise<UserResponse> {
-		return this.usersService.update(+params.id, data);
+	update(
+		@Param() params: IdParamDto,
+		@Body() data: UpdateDto,
+		@UploadedFile() profileImage: Express.Multer.File
+	): Promise<UserResponse> {
+		return this.usersService.update(+params.id, { ...data, profileImage });
 	}
 
 	@Delete('/:id')
