@@ -43,16 +43,18 @@ export class CacheInterceptor<Query, Params, Body> implements NestInterceptor {
 
 		return next.handle().pipe(
 			map(response => {
-				switch (method) {
-					case 'GET':
-					case 'POST':
-					case 'PUT':
-						this.cacheManager.set(cacheKey, response, ttl);
-						break;
-					case 'DELETE':
-						this.cacheManager.del(cacheKey);
-						break;
-					default:
+				if (response) {
+					switch (method) {
+						case 'GET':
+						case 'POST':
+						case 'PUT':
+							this.cacheManager.set(cacheKey, response, ttl);
+							break;
+						case 'DELETE':
+							this.cacheManager.del(cacheKey);
+							break;
+						default:
+					}
 				}
 
 				return response;
