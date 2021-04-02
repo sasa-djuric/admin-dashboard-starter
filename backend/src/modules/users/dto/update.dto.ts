@@ -19,6 +19,8 @@ export class UpdateDto {
 	@Transform(({ value }) => parseInt(value))
 	roleId: ID;
 
+	@ApiProperty()
+	@IsOptional()
 	profileImage: Express.Multer.File;
 
 	@ApiProperty()

@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsNotEmpty, Length } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, Length } from 'class-validator';
 import { ID } from 'src/core/types';
 
 export class CreateDto {
@@ -17,5 +17,7 @@ export class CreateDto {
 	@IsNotEmpty()
 	roleId: ID;
 
+	@ApiProperty()
+	@IsOptional()
 	profileImage: Express.Multer.File;
 }
