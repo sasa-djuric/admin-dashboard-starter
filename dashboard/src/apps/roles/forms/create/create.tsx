@@ -43,7 +43,7 @@ const CreateRoleForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, 
 		suspense: true
 	});
 	const [globalPermissions, setGlobalPermissions] = useState<Array<string>>([]);
-	const { handleChange, setFieldValue, handleSubmit, values, errors, isSubmitting } = useFormik<
+	const { handleChange, setFieldValue, handleSubmit, values, errors, dirty, isSubmitting } = useFormik<
 		CreateUserFormI | Omit<CreateUserFormI, 'id'>
 	>({
 		initialValues: user || {
@@ -212,6 +212,7 @@ const CreateRoleForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, 
 				type='primary'
 				style={{ width: '100%' }}
 				loading={isSubmitting}
+				disabled={!dirty}
 				onClick={e => console.log({ values: JSON.stringify(values.permissions) })}
 			>
 				Save

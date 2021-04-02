@@ -28,7 +28,7 @@ interface CreateUserFormI extends Omit<User, 'permissions'> {}
 const CreateUserForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, onSuccess }) => {
 	const { data: user } = useQuery(usersService.queries.getById(id), { enabled: !isNil(id), suspense: true });
 	const { data: roles } = useQuery(rolesService.queries.getAll(), { suspense: true });
-	const { handleChange, setFieldValue, handleSubmit, values, errors, isSubmitting } = useFormik<
+	const { handleChange, setFieldValue, handleSubmit, values, errors, dirty, isSubmitting } = useFormik<
 		CreateUserFormI | Omit<CreateUserFormI, 'id'>
 	>({
 		initialValues: user || {
@@ -110,7 +110,7 @@ const CreateUserForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, 
 
 			<Divider />
 
-			<Button htmlType='submit' type='primary' style={{ width: '100%' }} loading={isSubmitting}>
+			<Button htmlType='submit' type='primary' style={{ width: '100%' }} loading={isSubmitting} disabled={!dirty}>
 				Save
 			</Button>
 		</Form>
