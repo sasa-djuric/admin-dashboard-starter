@@ -10,6 +10,7 @@ import { SwitchRoleDto } from './dto/switch.dto';
 import { PhotosService } from '../photos/photos.service';
 import { Photo } from '../photos/photo.entity';
 import { UpdateResult } from 'typeorm';
+import { omit } from 'ramda';
 
 @Injectable()
 export class UsersService {
@@ -50,7 +51,10 @@ export class UsersService {
 
 		if (data.profileImage) {
 			profileImage = await this.photosService.create(data.profileImage);
-			createdUser = this.userRepository.create({ ...data, profileImageId: profileImage.id });
+			createdUser = this.userRepository.create({
+				...omit(['profileImage'], data),
+				profileImageId: profileImage.id
+			});
 		} else {
 			createdUser = this.userRepository.create(data);
 		}
@@ -70,23 +74,26 @@ export class UsersService {
 		let profileImage: Photo | undefined;
 		let updatedUser: UpdateResult;
 
-		if (profileImage) {
+		if (data.profileImage) {
 			if (existingUser.profileImageId) {
-				profileImage = await this.photosService.update({ id: existingUser.profileImageId }, data.profileImage);
-				updatedUser = await this.userRepository.update({ id }, data);
+				profileImage = await this.photosService.update(existingUser.profileImageId, data.profileImage);
+				updatedUser = await this.userRepository.update({ id }, omit(['profileImage'], data));
 			} else {
 				profileImage = await this.photosService.create(data.profileImage);
-				updatedUser = await this.userRepository.update({ id }, { ...data, profileImageId: profileImage.id });
+				updatedUser = await this.userRepository.update(
+					{ id },
+					{ ...omit(['profileImage'], data), profileImageId: profileImage?.id }
+				);
 			}
 		} else {
-			updatedUser = await this.userRepository.update({ id }, data);
+			updatedUser = await this.userRepository.update({ id }, omit(['profileImage'], data));
 		}
 
 		if (!updatedUser.affected) {
 			throw new NotFoundException(`User with given ID ${id} not found`);
 		}
 
-		return { ...updatedUser.raw[0], profileImage: profileImage?.url ?? null };
+		return this.userRepository.findOneUser(id);
 	}
 
 	public async remove(id: ID): Promise<{ id: ID }> {
