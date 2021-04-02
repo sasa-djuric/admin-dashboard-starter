@@ -39,7 +39,7 @@ export class RolesService {
 			throw new NotFoundException(`Role with ID ${id} not found`);
 		}
 
-		return updatedRole.raw[0];
+		return this.roleRepository.findOne(id);
 	}
 
 	async remove(id: ID): Promise<{ id: ID }> {
