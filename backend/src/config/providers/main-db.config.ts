@@ -11,8 +11,8 @@ const config = (): ConnectionOptions => ({
 	entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
 	subscribers: [__dirname + '/../../**/*.entity.subscriber{.ts,.js}'],
 	migrations: ['src/migration/*{.ts,.js}'],
-	synchronize: true,
-	logging: true,
+	synchronize: false,
+	logging: false,
 	cli: {
 		entitiesDir: 'src/providers/db/entity',
 		migrationsDir: 'src/providers/db/migration',
