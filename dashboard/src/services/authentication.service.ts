@@ -8,6 +8,7 @@ export function refreshToken() {
 		},
 		err => {
 			localStorage.removeItem('token');
+			throw err;
 		}
 	);
 }

@@ -22,6 +22,11 @@ export class TokenService {
 
 	public async refreshAccessToken(refreshToken: string): Promise<string> {
 		const userId = await this.redisService.getClient().get(refreshToken);
+
+		if (!userId) {
+			throw new UnauthorizedException();
+		}
+
 		const user: AuthUser = await this.usersService.getByIdWithPermissions(parseInt(userId));
 
 		if (!user.isActive) {

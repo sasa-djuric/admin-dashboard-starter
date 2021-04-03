@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, UnauthorizedException } from '@nestjs/common';
 import { Cookie } from '../../../core/decorators';
 import { RefreshTokenCookiesDto } from './dto';
 import { TokenService } from './token.service';
@@ -10,6 +10,11 @@ export class TokenController {
 	@Get('/refresh')
 	refreshAccessToken(@Cookie() cookies: RefreshTokenCookiesDto): Promise<string> {
 		const refreshToken = cookies['refresh-token'];
+
+		if (!refreshToken) {
+			throw new UnauthorizedException();
+		}
+
 		return this.tokenService.refreshAccessToken(refreshToken);
 	}
 }
