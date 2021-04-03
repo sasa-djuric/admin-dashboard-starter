@@ -5,8 +5,7 @@ import '../node_modules/antd/dist/antd.css';
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClientProvider, ReactQueryDevtools } from 'react-query-service';
-import { init, http } from '@startup/services';
-import authenticationService from '@startup/services/authentication';
+import { init } from '@startup/services';
 
 // Components
 import { Spin } from 'antd';
@@ -27,18 +26,6 @@ if (isDev && mockAPI) {
 }
 
 init(queryClient);
-
-http.addListener(http.Event.TokenRefresh, () =>
-	authenticationService.refreshAccessToken().then(
-		token => {
-			localStorage.setItem('token', token);
-			return token;
-		},
-		err => {
-			localStorage.removeItem('token');
-		}
-	)
-);
 
 Spin.setDefaultIndicator(<LoadingOutlined />);
 

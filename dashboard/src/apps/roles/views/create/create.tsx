@@ -10,6 +10,13 @@ import Spinner from '@components/spinner';
 // Containers
 import CreateUserForm from '../../forms/create';
 
+// Hooks
+import useAuth from 'src/hooks/use-auth';
+
+// Services
+import { Role } from '@startup/services/roles';
+import { refreshToken } from 'src/services/authentication.service';
+
 interface Params {
 	id?: string;
 }
@@ -19,10 +26,16 @@ interface CreateProps extends RouteComponentProps<Params> {
 }
 
 const RolesCreateView: React.FunctionComponent<CreateProps> = ({ isEditMode, history, match }) => {
+	const { authState, updateAuthState } = useAuth();
 	const id = match.params.id ? +match.params.id : null;
 
-	function onSubmit(promise: Promise<any>) {
-		promise.then(() => {
+	function onSubmit(promise: Promise<Role>) {
+		promise.then(async result => {
+			if (result.id === authState.user?.roleId) {
+				await refreshToken();
+				await updateAuthState();
+			}
+
 			history.goBack();
 		});
 	}

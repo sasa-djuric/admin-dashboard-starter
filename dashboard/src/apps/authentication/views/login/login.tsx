@@ -1,5 +1,4 @@
 // Libs
-import { useContext } from 'react';
 import { RouteComponentProps } from 'react-router';
 
 // Containers
@@ -9,18 +8,17 @@ import AuthenticationPage from '../../templates/page';
 // Services
 import { LoginResponse } from '@startup/services/authentication';
 
-// Contexts
-import { AuthContext } from 'src/contexts/auth/auth.context';
-import { login } from 'src/contexts/auth/actions';
+// Hooks
+import useAuth from 'src/hooks/use-auth';
 
 interface LoginProps extends RouteComponentProps {}
 
 const LoginView: React.FunctionComponent<LoginProps> = ({ history }) => {
-	const [_, dispatchAuth] = useContext(AuthContext);
+	const { updateAuthState } = useAuth();
 
 	function onSuccess(data: LoginResponse) {
 		localStorage.setItem('token', data.token);
-		dispatchAuth(login(data.user));
+		updateAuthState();
 		history.replace('/');
 	}
 

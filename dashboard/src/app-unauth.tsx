@@ -1,42 +1,23 @@
 // Libs
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { AppRoutes } from './lib/routing';
 
 // Assets
 import authenticationApp from './apps/authentication';
 import styles from './app-unauth.module.scss';
 
-// Contexts
-import { AuthContext } from './contexts/auth/auth.context';
-import { authLoading, login } from './contexts/auth/actions';
-
-// Services
-import authenticationService from '@startup/services/authentication';
-
 // Components
 import Spinner from './components/spinner';
 
+// Hooks
+import useAuth from './hooks/use-auth';
+
 function UnauthenticatedApp() {
-	const [authState, authDispatch] = useContext(AuthContext);
+	const { authState, updateAuthState } = useAuth();
 	const [isInited, setIsInited] = useState(false);
 
-	function handleAuth() {
-		const token = localStorage.getItem('token');
-
-		authDispatch(authLoading(true));
-
-		authenticationService
-			.loginWithToken(token)
-			.then(result => {
-				authDispatch(login(result));
-			})
-			.catch(() => {
-				authDispatch(authLoading(false));
-			});
-	}
-
 	useEffect(() => {
-		handleAuth();
+		updateAuthState();
 		setIsInited(true);
 	}, []);
 

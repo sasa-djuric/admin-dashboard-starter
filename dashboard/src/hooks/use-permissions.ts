@@ -2,7 +2,7 @@ import { Permissions } from '@startup/services';
 import useAuth from './use-auth';
 
 const usePermissions = () => {
-	const [authState] = useAuth();
+	const { authState } = useAuth();
 
 	function havePermission(permissions?: Array<Permissions>) {
 		if (!permissions?.length) {

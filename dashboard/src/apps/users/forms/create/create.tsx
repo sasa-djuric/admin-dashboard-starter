@@ -20,12 +20,12 @@ import { isNil } from 'ramda';
 interface CreateProps {
 	id?: ID | null;
 	isEditMode: boolean;
-	onSuccess: Function;
+	onSubmit: (promise: Promise<User>) => void;
 }
 
 interface CreateUserFormI extends Omit<User, 'permissions'> {}
 
-const CreateUserForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, onSuccess }) => {
+const CreateUserForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, onSubmit }) => {
 	const { data: user } = useQuery(usersService.queries.getById(id), { enabled: !isNil(id), suspense: true });
 	const { data: roles } = useQuery(rolesService.queries.getAll(), { suspense: true });
 	const { handleChange, setFieldValue, handleSubmit, values, errors, dirty, isSubmitting } = useFormik<
@@ -43,20 +43,26 @@ const CreateUserForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, 
 		onSubmit: values => {
 			const requestMethodName = !isEditMode ? 'create' : 'update';
 			const requestMethod = usersService[requestMethodName];
+			let promise: Promise<User>;
 
-			return requestMethod(values).then(
+			promise = requestMethod(values).then(
 				result => {
-					if (onSuccess) {
-						onSuccess();
-					}
 					return result;
 				},
 				err => {
 					notification.error({
 						message: err.message
 					});
+
+					return err;
 				}
 			);
+
+			if (onSubmit) {
+				onSubmit(promise);
+			}
+
+			return promise;
 		}
 	});
 

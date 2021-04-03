@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import { useQuery } from 'react-query-service';
 
 // Components
-import { Button, Card, Checkbox, Col, Divider, Form, Input, Row, Switch } from 'antd';
+import { Button, Card, Checkbox, Col, Divider, Form, Input, notification, Row, Switch } from 'antd';
 
 // Config
 import validationSchema from './validation.schema';
@@ -20,7 +20,7 @@ import { uniq } from 'ramda';
 interface CreateProps {
 	id?: ID | null;
 	isEditMode: boolean;
-	onSubmit: (promise: Promise<any>) => void;
+	onSubmit: (promise: Promise<Role>) => void;
 }
 
 const entities = [
@@ -54,13 +54,22 @@ const CreateRoleForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, 
 		validationSchema,
 		validateOnChange: false,
 		onSubmit: values => {
-			let promise: Promise<any> = Promise.resolve();
+			const requestMethodName = !isEditMode ? 'create' : 'update';
+			const requestMethod = rolesService[requestMethodName];
+			let promise: Promise<Role>;
 
-			if (!isEditMode) {
-				promise = rolesService.create(values);
-			} else {
-				promise = rolesService.update(values);
-			}
+			promise = requestMethod(values).then(
+				result => {
+					return result;
+				},
+				err => {
+					notification.error({
+						message: err.message
+					});
+
+					return err;
+				}
+			);
 
 			if (onSubmit) {
 				onSubmit(promise);

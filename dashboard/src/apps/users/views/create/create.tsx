@@ -10,6 +10,13 @@ import Spinner from '@components/spinner';
 // Containers
 import CreateUserForm from '../../forms/create';
 
+// Hooks
+import useAuth from 'src/hooks/use-auth';
+
+// Services
+import { User } from '@startup/services/users';
+import { refreshToken } from 'src/services/authentication.service';
+
 interface Params {
 	id?: string;
 }
@@ -19,10 +26,18 @@ interface CreateProps extends RouteComponentProps<Params> {
 }
 
 const UsersCreateView: React.FunctionComponent<CreateProps> = ({ isEditMode, history, match }) => {
+	const { authState, updateAuthState } = useAuth();
 	const id = match.params.id ? +match.params.id : null;
 
-	function onSuccess() {
-		history.goBack();
+	function onSubmit(promise: Promise<User>) {
+		promise.then(async result => {
+			if (result.id === authState.user?.id) {
+				await refreshToken();
+				await updateAuthState();
+			}
+
+			history.goBack();
+		});
 	}
 
 	return (
@@ -37,7 +52,7 @@ const UsersCreateView: React.FunctionComponent<CreateProps> = ({ isEditMode, his
 			<Card>
 				<ErrorBoundary>
 					<Suspense fallback={<Spinner />}>
-						<CreateUserForm id={id} isEditMode={!!isEditMode} onSuccess={onSuccess} />
+						<CreateUserForm id={id} isEditMode={!!isEditMode} onSubmit={onSubmit} />
 					</Suspense>
 				</ErrorBoundary>
 			</Card>

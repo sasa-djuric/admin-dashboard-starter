@@ -1,6 +1,6 @@
 // Libs
 import { Route, Switch } from 'react-router-dom';
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { AppRoutes } from './lib/routing';
 
 // Containers
@@ -13,25 +13,24 @@ import DashboardView from './views/dashboard';
 // Assets
 import apps from './apps/index';
 
-// Contexts
-import { AuthContext } from './contexts/auth/auth.context';
-import { logout } from './contexts/auth/actions';
+// Hooks
+import useAuth from './hooks/use-auth';
 
 // Services
 import { http } from '@startup/services';
-import authenticationService from '@startup/services/authentication';
+import { refreshToken } from './services/authentication.service';
 
 function App() {
-	const [authState, dispatchAuth] = useContext(AuthContext);
-
-	function onUnauthorized() {
-		localStorage.removeItem('token');
-		authenticationService.logout();
-		dispatchAuth(logout());
-	}
+	const { authState, logout, updateAuthState } = useAuth();
 
 	function onInit() {
-		http.addListener(http.Event.Unauthorized, onUnauthorized);
+		http.addListener(http.Event.TokenRefresh, async () => {
+			const token = await refreshToken();
+			await updateAuthState();
+			return token;
+		});
+
+		http.addListener(http.Event.Unauthorized, logout);
 	}
 
 	useEffect(onInit, []);

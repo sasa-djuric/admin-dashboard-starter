@@ -7,16 +7,19 @@ export enum AuthAction {
 	Loading = 'loading'
 }
 
-export function login<T extends AuthenticatedUser>(payload: T): Action<T> {
+export function loginAction<T extends AuthenticatedUser>(payload: T): Action<T> {
 	return { type: AuthAction.Login, payload };
 }
 
-export function logout(): Action {
+export function logoutAction(): Action {
 	return { type: AuthAction.Logout };
 }
 
-export function authLoading<T extends boolean>(payload: T): Action<T> {
+export function authLoadingAction<T extends boolean>(payload: T): Action<T> {
 	return { type: AuthAction.Loading, payload };
 }
 
-export type Actions = ReturnType<typeof login> | ReturnType<typeof logout> | ReturnType<typeof authLoading>;
+export type Actions =
+	| ReturnType<typeof loginAction>
+	| ReturnType<typeof logoutAction>
+	| ReturnType<typeof authLoadingAction>;

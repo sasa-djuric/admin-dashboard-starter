@@ -18,6 +18,7 @@ import { ColumnsType } from 'antd/lib/table';
 // Services
 import rolesService, { Role } from '@startup/services/roles';
 import usersService from '@startup/services/users';
+import { refreshToken } from 'src/services/authentication.service';
 
 // Interfaces
 import { ID } from '@startup/services';
@@ -31,6 +32,9 @@ import { debounce } from '../../../../utils';
 
 // Config
 import settings from '../../';
+
+// Hooks
+import useAuth from 'src/hooks/use-auth';
 
 const columns = ({ onEdit, onDelete }: any): ColumnsType<TableRow> => [
 	{
@@ -87,6 +91,7 @@ const RolesMainView: FunctionComponent<RolesMainViewProps> = ({ history, match }
 	const id = match.params.id ? +match.params.id : undefined;
 	const isMaster = typeof id !== 'number';
 	const [search, setSearch] = useState('');
+	const { authState } = useAuth();
 	const { data: roles, isLoading } = useQuery(rolesService.queries.getAll());
 
 	function onNew() {
@@ -114,9 +119,16 @@ const RolesMainView: FunctionComponent<RolesMainViewProps> = ({ history, match }
 					return Promise.reject();
 				}
 
-				return usersService.swithRole({ id, roleId: replacement }).then(() => {
-					return rolesService.remove(id);
-				});
+				return usersService
+					.swithRole({ id, roleId: replacement })
+					.then(() => {
+						return rolesService.remove(id);
+					})
+					.then(() => {
+						if (id === authState.user?.roleId) {
+							return refreshToken();
+						}
+					});
 			}
 		});
 	}
