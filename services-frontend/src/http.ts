@@ -92,9 +92,7 @@ async function _onTokenExpired(error: AxiosError) {
 		lastTokenError = currentError;
 
 		if (refreshHandler) {
-			const token = await refreshHandler();
-
-			setToken(token);
+			setToken(await refreshHandler());
 
 			const retryResponse = await axios.request(error.config);
 

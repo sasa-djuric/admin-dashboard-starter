@@ -13,20 +13,6 @@ export interface LoginResponse {
 	user: AuthenticatedUser;
 }
 
-function validateToken(token: string) {
-	try {
-		return decode(token, { complete: true }) as Record<any, any>;
-
-		// if (decodedToken.exp > new Date().getTime()) {
-		// 	return true;
-		// }
-
-		// return false;
-	} catch {
-		return false;
-	}
-}
-
 function login(data: LoginRequest) {
 	return http.post<LoginResponse>('/authentication/login', data).then(result => {
 		if (result.token) {
@@ -42,11 +28,11 @@ async function loginWithToken(token: string | null) {
 		return Promise.reject();
 	}
 
-	const validated = validateToken(token);
+	const decoded = decode(token, { complete: true }) as Record<any, any>;
 
-	if (validated) {
+	if (decoded) {
 		http.setToken(token);
-		return Promise.resolve(validated.payload.user);
+		return Promise.resolve(decoded.payload.user);
 	}
 
 	return Promise.reject();
