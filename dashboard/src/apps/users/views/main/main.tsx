@@ -116,9 +116,11 @@ const UsersMainView: FunctionComponent<UsersMainViewProps> = ({ history, match }
 				title='Users'
 				subTitle='List of users'
 				extra={[
-					<Button key='new' onClick={onNew}>
-						Add New
-					</Button>
+					<Protected permissions={[UsersPermissions.Create]}>
+						<Button key='new' onClick={onNew}>
+							Add New
+						</Button>
+					</Protected>
 				]}
 				style={{ marginBottom: '24px' }}
 				onBack={id ? () => history.goBack() : undefined}

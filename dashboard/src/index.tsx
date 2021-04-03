@@ -45,7 +45,7 @@ Spin.setDefaultIndicator(<LoadingOutlined />);
 ReactDOM.render(
 	<BrowserRouter>
 		<QueryClientProvider client={queryClient}>
-			<ReactQueryDevtools />
+			{isDev && <ReactQueryDevtools />}
 			<AuthProvider>
 				<App />
 			</AuthProvider>

@@ -145,9 +145,11 @@ const RolesMainView: FunctionComponent<RolesMainViewProps> = ({ history, match }
 				title='Roles'
 				subTitle='List of roles'
 				extra={[
-					<Button key='new' onClick={onNew}>
-						Add New
-					</Button>
+					<Protected permissions={[RolesPermissions.Create]}>
+						<Button key='new' onClick={onNew}>
+							Add New
+						</Button>
+					</Protected>
 				]}
 				style={{ marginBottom: '24px' }}
 				onBack={id ? () => history.goBack() : undefined}

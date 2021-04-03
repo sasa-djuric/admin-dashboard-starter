@@ -1,6 +1,6 @@
 import { Permissions } from '@startup/services';
 import { Redirect, Route, RouteProps } from 'react-router';
-import useAuth from 'src/hooks/use-auth';
+import usePermissions from 'src/hooks/use-permissions';
 
 interface ProtectedRouteProps extends RouteProps {
 	permissions?: Array<Permissions>;
@@ -12,18 +12,13 @@ const ProtectedRoute: React.FunctionComponent<ProtectedRouteProps> = ({
 	permissions,
 	...props
 }) => {
-	const [authState] = useAuth();
+	const havePermission = usePermissions();
 
 	return (
 		<Route
 			{...props}
 			render={props => {
-				if (
-					!Component ||
-					(permissions && !permissions.every(permission => authState.user?.permissions?.includes(permission)))
-				)
-					return <Redirect to='/login' />;
-
+				if (!Component || !havePermission(permissions)) return <Redirect to='/login' />;
 				return <Component {...props} />;
 			}}
 		/>

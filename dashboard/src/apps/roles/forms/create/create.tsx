@@ -207,14 +207,7 @@ const CreateRoleForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, 
 
 			<Divider />
 
-			<Button
-				htmlType='submit'
-				type='primary'
-				style={{ width: '100%' }}
-				loading={isSubmitting}
-				disabled={!dirty}
-				onClick={e => console.log({ values: JSON.stringify(values.permissions) })}
-			>
+			<Button htmlType='submit' type='primary' style={{ width: '100%' }} loading={isSubmitting} disabled={!dirty}>
 				Save
 			</Button>
 		</Form>

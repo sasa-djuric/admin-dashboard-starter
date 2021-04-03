@@ -1,15 +1,15 @@
 import { Permissions } from '@startup/services';
 import { Fragment } from 'react';
-import useAuth from 'src/hooks/use-auth';
+import usePermissions from 'src/hooks/use-permissions';
 
 interface ProtectedProps {
 	permissions: Array<Permissions>;
 }
 
 const Protected: React.FunctionComponent<ProtectedProps> = ({ permissions, children }) => {
-	const [authState] = useAuth();
+	const havePermission = usePermissions();
 
-	if (!permissions.every(permission => authState.user?.permissions.includes(permission))) {
+	if (!havePermission(permissions)) {
 		return <Fragment />;
 	}
 

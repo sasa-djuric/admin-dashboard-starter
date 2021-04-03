@@ -3,7 +3,7 @@ import { UserOutlined } from '@ant-design/icons';
 import { grey } from '@ant-design/colors';
 
 // Libs
-import { FunctionComponent, useContext, useMemo, useState } from 'react';
+import { Fragment, FunctionComponent, useContext, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // Components
@@ -16,6 +16,9 @@ import navigation, { NavigationConfig } from '../../config/navigation';
 // Contexts
 import { AuthContext } from 'src/contexts/auth/auth.context';
 
+// Hooks
+import usePermissions from 'src/hooks/use-permissions';
+
 const { Text } = Typography;
 const { Header, Content, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -23,19 +26,24 @@ const { SubMenu } = Menu;
 const AppShell: FunctionComponent = ({ children }) => {
 	const [collapsed, setCollapsed] = useState(false);
 	const [authState] = useContext(AuthContext);
+	const havePermission = usePermissions();
 
-	function findSelectedIndex(list: NavigationConfig, index?: number): number {
+	function findSelectedIndex(list: NavigationConfig, index?: number): Array<number> {
 		const haveIndex = typeof index === 'number' && !Number.isNaN(index);
 
 		for (let i = 0; i < list.length; i++) {
 			if (list[i].subItems) {
-				return (haveIndex ? index! : 1) * findSelectedIndex(list[i].subItems!, i);
+				const subIndexes = findSelectedIndex(list[i].subItems!, i);
+				return [
+					...subIndexes.slice(0, subIndexes.length - 1),
+					(haveIndex ? index! : 1) * subIndexes[subIndexes.length - 1]
+				];
 			} else if (list[i].path!.length > 1 && window.location.pathname.includes(list[i].path!)) {
-				return i + 1;
+				return [index!, i + 1];
 			}
 		}
 
-		return 0;
+		return [0];
 	}
 
 	const selectedIndex = useMemo(() => findSelectedIndex(navigation), []);
@@ -46,11 +54,15 @@ const AppShell: FunctionComponent = ({ children }) => {
 				<div className='logo' style={{ height: '60px' }} />
 				<Menu
 					theme='dark'
-					defaultSelectedKeys={[`main-menu-${selectedIndex}`]}
-					// defaultOpenKeys={[`main-menu-${selectedIndex}`]}
+					defaultSelectedKeys={[`main-menu-${selectedIndex[selectedIndex.length - 1]}`]}
+					defaultOpenKeys={selectedIndex.map(index => `main-menu-${index}`)}
 					mode='inline'
 				>
-					{navigation.map(({ title, icon: Icon, path, subItems }, index) => {
+					{navigation.map(({ title, icon: Icon, path, subItems, permissions }, index) => {
+						if (!havePermission(permissions)) {
+							return <Fragment />;
+						}
+
 						if (!subItems) {
 							return (
 								<Menu.Item key={`main-menu-${index}`} icon={<Icon />}>
@@ -61,7 +73,11 @@ const AppShell: FunctionComponent = ({ children }) => {
 
 						return (
 							<SubMenu key={`main-menu-${index}`} icon={<Icon />} title={title}>
-								{subItems.map(({ title, icon: Icon, path }, subIndex) => {
+								{subItems.map(({ title, icon: Icon, path, permissions }, subIndex) => {
+									if (!havePermission(permissions)) {
+										return <Fragment />;
+									}
+
 									return (
 										<Menu.Item
 											key={`main-menu-${(subIndex + 1) * index}`}
