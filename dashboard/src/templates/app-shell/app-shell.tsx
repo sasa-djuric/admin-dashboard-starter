@@ -12,6 +12,8 @@ import UserMenu from '../../containers/user-menu';
 
 // Config
 import navigation, { NavigationConfig } from '../../config/navigation';
+
+// Contexts
 import { AuthContext } from 'src/contexts/auth/auth.context';
 
 const { Text } = Typography;
@@ -42,7 +44,12 @@ const AppShell: FunctionComponent = ({ children }) => {
 		<Layout style={{ minHeight: '100vh' }}>
 			<Sider collapsible collapsed={collapsed} onCollapse={setCollapsed}>
 				<div className='logo' style={{ height: '60px' }} />
-				<Menu theme='dark' defaultSelectedKeys={[`main-menu-${selectedIndex}`]} mode='inline'>
+				<Menu
+					theme='dark'
+					defaultSelectedKeys={[`main-menu-${selectedIndex}`]}
+					// defaultOpenKeys={[`main-menu-${selectedIndex}`]}
+					mode='inline'
+				>
 					{navigation.map(({ title, icon: Icon, path, subItems }, index) => {
 						if (!subItems) {
 							return (

@@ -1,5 +1,5 @@
 // Libs
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AppRoutes } from './lib/routing';
 
 // Assets
@@ -18,6 +18,7 @@ import Spinner from './components/spinner';
 
 function UnauthenticatedApp() {
 	const [authState, authDispatch] = useContext(AuthContext);
+	const [isInited, setIsInited] = useState(false);
 
 	function handleAuth() {
 		const token = localStorage.getItem('token');
@@ -36,11 +37,12 @@ function UnauthenticatedApp() {
 
 	useEffect(() => {
 		handleAuth();
+		setIsInited(true);
 	}, []);
 
 	return (
 		<div className={styles['app-unauth']}>
-			{!authState.isLoading ? (
+			{!authState.isLoading && isInited ? (
 				<AppRoutes apps={[authenticationApp]} defaultPath='/login' />
 			) : (
 				<Spinner size='large' />
