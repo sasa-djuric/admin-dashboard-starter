@@ -1,6 +1,7 @@
 import { createService } from 'react-query-service';
 import { decode } from 'jsonwebtoken';
 import { AuthenticatedUser } from '../users';
+import { getQueryClient } from '..';
 import http from '../http';
 
 export interface LoginRequest {
@@ -40,6 +41,7 @@ async function loginWithToken(token: string | null) {
 
 async function logout() {
 	http.removeToken();
+	getQueryClient().getQueryCache().clear();
 }
 
 export interface ForgotPasswordRequest {
