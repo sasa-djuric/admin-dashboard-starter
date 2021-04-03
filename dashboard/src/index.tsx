@@ -17,13 +17,14 @@ import App from './app';
 
 // Config
 import queryClient from './config/query-client';
+import { isDev, mockAPI } from './config/dev';
 
 // Contexts
 import AuthProvider from './contexts/auth/auth.context';
 
-// if (process.env.NODE_ENV === 'development') {
-// 	require('@startup/services/mocks').startMockServer();
-// }
+if (isDev && mockAPI) {
+	require('@startup/services/mocks').startMockServer();
+}
 
 init(queryClient);
 
