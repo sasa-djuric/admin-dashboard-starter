@@ -43,7 +43,8 @@ export class AppService {
 			name: appConfig.userName,
 			password: appConfig.userPassword,
 			roleId: role.id,
-			isActive: true
+			isActive: true,
+			isActivated: true
 		});
 	}
 }
