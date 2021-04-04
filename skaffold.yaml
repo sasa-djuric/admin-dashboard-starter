@@ -8,16 +8,20 @@ build:
     local:
         push: false
     artifacts:
-        - image: startup/backend
+        - image: app/backend
           context: backend
           docker:
               dockerfile: Dockerfile
           sync:
               manual:
-                  - src: 'src/**/*.js'
+                  - src: 'src/**/*.ts'
                     dest: .
 
-        - image: startup/redis
-          context: db/redis
+        - image: app/dashboard
+          context: frontend
           docker:
-              dockerfile: Dockerfile
+              dockerfile: Dockerfile.dashboard
+          sync:
+              manual:
+                  - src: 'src/**/*.ts'
+                    dest: .

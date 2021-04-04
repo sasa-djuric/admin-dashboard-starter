@@ -16,10 +16,10 @@ spec:
         spec:
             containers:
                 - name: redis
-                  image: startup/redis
-                  imagePullPolicy: Never
+                  image: redis:alpine3.13
                   ports:
                       - containerPort: 6379
+                        name: redis
                   volumeMounts:
                   - name: redis-volume
                     mountPath: /data

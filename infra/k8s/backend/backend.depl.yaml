@@ -14,7 +14,7 @@ spec:
         spec:
             containers:
                 - name: backend
-                  image: startup/backend
+                  image: app/backend
                   imagePullPolicy: Never
                   ports:
                       - containerPort: 3000
@@ -35,3 +35,31 @@ spec:
                       value: redis
                     - name: REDIS_PORT
                       value: '6379'
+
+                    - name: JWT_SECRET
+                      value: secret
+
+                    - name: PROJECT_NAME
+                      value: Startup
+                    - name: PROJECT_DOMAIN
+                      value: app.com
+                    - name: PROJECT_URL
+                      value: http://app.com
+
+                    - name: MAIL_HOST
+                      value: smtp.gmail.com
+                    - name: MAIL_PORT
+                      value: '465'
+                    - name: MAIL_USERNAME
+                      value: djsasa.mail@gmail.com
+                    - name: MAIL_PASSWORD
+                      value: fisfisfis123
+                    - name: MAIL_DEFAULT_FROM
+                      value: '"admin" <admin@app.com>'
+
+                    - name: USER_EMAIL
+                      value: admin@app.com
+                    - name: USER_PASSWORD
+                      value: administrator
+                    - name: USER_NAME
+                      value: Admin
