@@ -1,7 +1,10 @@
 // Libs
 import { Route, Switch } from 'react-router-dom';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { AppRoutes } from './lib/routing';
+
+// Components
+import Spinner from './components/spinner';
 
 // Containers
 import AppShell from './templates/app-shell';
@@ -21,32 +24,34 @@ import { http } from '@app/services';
 import { refreshToken } from './services/authentication.service';
 
 function App() {
-  const { authState, logout, updateAuthState } = useAuth();
+	const { authState, logout, updateAuthState } = useAuth();
 
-  function onInit() {
-    http.addListener(http.Event.TokenRefresh, async () => {
-      const token = await refreshToken();
-      await updateAuthState();
-      return token;
-    });
+	function onInit() {
+		http.addListener(http.Event.TokenRefresh, async () => {
+			const token = await refreshToken();
+			await updateAuthState();
+			return token;
+		});
 
-    http.addListener(http.Event.Unauthorized, logout);
-  }
+		http.addListener(http.Event.Unauthorized, logout);
+	}
 
-  useEffect(onInit, []);
+	useEffect(onInit, []);
 
-  if (!authState.isAuth) return <UnauthenticatedApp />;
+	if (!authState.isAuth) return <UnauthenticatedApp />;
 
-  return (
-    <div>
-      <AppShell>
-        <Switch>
-          <Route path="/" exact={true} component={DashboardView} />
-          <AppRoutes apps={apps} />
-        </Switch>
-      </AppShell>
-    </div>
-  );
+	return (
+		<div>
+			<AppShell>
+				<Suspense fallback={<Spinner size='large' />}>
+					<Switch>
+						<Route path='/' exact={true} component={DashboardView} />
+						<AppRoutes apps={apps} />
+					</Switch>
+				</Suspense>
+			</AppShell>
+		</div>
+	);
 }
 
 export default App;

@@ -1,5 +1,5 @@
 // Libs
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { AppRoutes } from './lib/routing';
 
 // Assets
@@ -23,11 +23,13 @@ function UnauthenticatedApp() {
 
 	return (
 		<div className={styles['app-unauth']}>
-			{!authState.isLoading && isInited ? (
-				<AppRoutes apps={[authenticationApp]} defaultPath='/login' />
-			) : (
-				<Spinner size='large' />
-			)}
+			<Suspense fallback={<Spinner size='large' />}>
+				{!authState.isLoading && isInited ? (
+					<AppRoutes apps={[authenticationApp]} defaultPath='/login' />
+				) : (
+					<Spinner size='large' />
+				)}
+			</Suspense>
 		</div>
 	);
 }
