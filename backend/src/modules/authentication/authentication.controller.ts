@@ -1,5 +1,7 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
+import { ProjectConfig } from 'src/config/project';
 import { AuthenticationService } from './authentication.service';
 import {
 	LoginDto,
@@ -11,7 +13,10 @@ import {
 
 @Controller('authentication')
 export class AuthenticationController {
-	constructor(private readonly authService: AuthenticationService) {}
+	constructor(
+		private readonly authService: AuthenticationService,
+		private readonly configService: ConfigService
+	) {}
 
 	@Post('/login')
 	async login(@Body() data: LoginDto, @Res() response: Response): Promise<LoginResponseDto> {
@@ -21,7 +26,8 @@ export class AuthenticationController {
 			sameSite: 'strict',
 			httpOnly: true,
 			secure: process.env.NODE_ENV !== 'development',
-			expires: new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000)
+			expires: new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000),
+			domain: this.configService.get<ProjectConfig>('project').domain
 		});
 
 		response.json(result);

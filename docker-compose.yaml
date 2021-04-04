@@ -51,6 +51,7 @@ services:
         environment:
             VIRTUAL_HOST: api.app.com
             VIRTUAL_PORT: 3000
+            NODE_ENV: development
 
     dashboard:
         container_name: health-center_dashboard

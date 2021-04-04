@@ -1,5 +1,5 @@
 import { Global, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { projectConfig } from '../../config/project';
 import { UserRepository } from '../users/user.repository';
@@ -17,7 +17,7 @@ import { Activation } from './activation.entity';
 		TypeOrmModule.forFeature([UserRepository, ForgotPassword, Activation]),
 		ConfigModule.forFeature(projectConfig)
 	],
-	providers: [AuthenticationService, TokenService, UsersService],
+	providers: [AuthenticationService, TokenService, UsersService, ConfigService],
 	controllers: [AuthenticationController, TokenController],
 	exports: [TokenService, AuthenticationService]
 })
