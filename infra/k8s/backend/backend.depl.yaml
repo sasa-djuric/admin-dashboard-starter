@@ -21,15 +21,30 @@ spec:
                   env:
                     - name: NODE_ENV
                       value: production
-                      
+
+
                     - name: MAIN_DATABASE_HOST
                       value: main-db
+
+
                     - name: MAIN_DATABASE_USERNAME
-                      value: root
+                      valueFrom:
+                          secretKeyRef:
+                              name: main-db-secrets
+                              key: main_database_username
+
                     - name: MAIN_DATABASE_PASSWORD
-                      value: password
+                      valueFrom:
+                          secretKeyRef:
+                              name: main-db-secrets
+                              key: main_database_password
+
                     - name: MAIN_DATABASE
-                      value: main
+                      valueFrom:
+                        secretKeyRef:
+                          name: main-db-secrets
+                          key: main_database
+
 
                     - name: REDIS_HOST
                       value: redis
@@ -37,7 +52,11 @@ spec:
                       value: '6379'
 
                     - name: JWT_SECRET
-                      value: secret
+                      valueFrom:
+                        secretKeyRef:
+                          name: other-secrets
+                          key: jwt-secret
+
 
                     - name: PROJECT_NAME
                       value: Startup
@@ -47,19 +66,47 @@ spec:
                       value: http://app.com
 
                     - name: MAIL_HOST
-                      value: smtp.gmail.com
+                      valueFrom:
+                        secretKeyRef:
+                          name: email-secret
+                          key: mail_host
+
                     - name: MAIL_PORT
-                      value: '465'
+                      valueFrom:
+                        secretKeyRef:
+                          name: email-secret
+                          key: mail_port
+
                     - name: MAIL_USERNAME
-                      value: djsasa.mail@gmail.com
+                      valueFrom:
+                        secretKeyRef:
+                          name: email-secret
+                          key: mail_username
+
                     - name: MAIL_PASSWORD
-                      value: fisfisfis123
+                      valueFrom:
+                        secretKeyRef:
+                          name: email-secret
+                          key: mail_password
+
                     - name: MAIL_DEFAULT_FROM
-                      value: '"admin" <admin@app.com>'
+                      valueFrom:
+                        secretKeyRef:
+                          name: email-secret
+                          key: mail_default_from
+
 
                     - name: USER_EMAIL
-                      value: admin@app.com
+                      valueFrom:
+                        secretKeyRef:
+                          name: default-user-secret
+                          key: user_email
+
                     - name: USER_PASSWORD
-                      value: administrator
+                      valueFrom:
+                        secretKeyRef:
+                          name: default-user-secret
+                          key: user_password
+
                     - name: USER_NAME
                       value: Admin

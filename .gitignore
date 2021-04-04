@@ -20,5 +20,6 @@
 **notes.txt**
 ****build**
 **.eslintcache**
+**.secret.yaml**
 
 TODO.md
