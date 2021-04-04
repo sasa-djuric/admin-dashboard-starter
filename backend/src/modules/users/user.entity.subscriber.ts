@@ -1,4 +1,10 @@
-import { Connection, EntitySubscriberInterface, EventSubscriber, InsertEvent, UpdateEvent } from 'typeorm';
+import {
+	Connection,
+	EntitySubscriberInterface,
+	EventSubscriber,
+	InsertEvent,
+	UpdateEvent
+} from 'typeorm';
 import { User } from './user.entity';
 import { hash } from 'bcrypt';
 

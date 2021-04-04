@@ -36,7 +36,14 @@ import { join } from 'path';
 		ConfigModule.forRoot({
 			envFilePath: ['.env.development.local'],
 			ignoreEnvFile: !(!process.env.NODE_ENV || process.env.NODE_ENV === 'development'),
-			load: [appConfig, dbConfig, mailConfig, projectConfig, authenticationConfig, redisConfig]
+			load: [
+				appConfig,
+				dbConfig,
+				mailConfig,
+				projectConfig,
+				authenticationConfig,
+				redisConfig
+			]
 		}),
 		TypeOrmModule.forRootAsync({
 			imports: [ConfigModule],

@@ -16,7 +16,9 @@ export class PhotosService {
 		private readonly photoRepository: Repository<Photo>,
 		private readonly configService: ConfigService
 	) {}
-	private readonly BASE_URL = `http://api.${this.configService.get<ProjectConfig>('project').domain}`;
+	private readonly BASE_URL = `http://api.${
+		this.configService.get<ProjectConfig>('project').domain
+	}`;
 	private readonly PHOTOS_URL = `${this.BASE_URL}/${StorageType.Photos}`;
 
 	public async create(file: Express.Multer.File): Promise<Photo> {
@@ -63,6 +65,9 @@ export class PhotosService {
 	}
 
 	private unlink(filename: string) {
-		fs.unlink(path.resolve(__dirname, '../../../public', StorageType.Photos, filename), () => {});
+		fs.unlink(
+			path.resolve(__dirname, '../../../public', StorageType.Photos, filename),
+			() => {}
+		);
 	}
 }

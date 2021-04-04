@@ -12,7 +12,10 @@ export class TokenService {
 	private readonly REFRESH_TOKEN_EXPIRE_TIME_SEC = 6 * 30 * 24 * 60 * 60;
 	private readonly EXPIRED_ERROR_CODE = 'TOKEN_EXPIRED';
 
-	constructor(private readonly usersService: UsersService, private readonly redisService: RedisService) {}
+	constructor(
+		private readonly usersService: UsersService,
+		private readonly redisService: RedisService
+	) {}
 
 	public generateAccessToken(user: AuthUser): string {
 		return sign({ user }, process.env.JWT_SECRET, {

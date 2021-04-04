@@ -42,7 +42,10 @@ export class UsersController {
 
 	@Post('/')
 	@UseInterceptors(FileInterceptor('profileImage', multerConfig({ type: StorageType.Photos })))
-	create(@Body() data: CreateDto, @UploadedFile() profileImage: Express.Multer.File): Promise<UserResponse> {
+	create(
+		@Body() data: CreateDto,
+		@UploadedFile() profileImage: Express.Multer.File
+	): Promise<UserResponse> {
 		return this.usersService.create({ ...data, profileImage });
 	}
 

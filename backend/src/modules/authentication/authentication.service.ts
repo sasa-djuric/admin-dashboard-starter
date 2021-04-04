@@ -6,7 +6,13 @@ import { compare, genSalt, hash } from 'bcrypt';
 import { Repository } from 'typeorm';
 import { omit } from 'ramda';
 import { UserRepository } from '../users/user.repository';
-import { LoginDto, ForgotPasswordDto, ResetPasswordDto, LoginResponseDto, ActivationDto } from './dto';
+import {
+	LoginDto,
+	ForgotPasswordDto,
+	ResetPasswordDto,
+	LoginResponseDto,
+	ActivationDto
+} from './dto';
 import { ForgotPassword } from './forgot-password.entity';
 import { emailTemplate } from '../../core/mail/template';
 import { User } from '../users/user.entity';
@@ -32,7 +38,10 @@ export class AuthenticationService {
 
 	public async login(data: LoginDto): Promise<LoginResponseDto & { refreshToken: string }> {
 		try {
-			const user = await this.userRepository.findOneWithPermissions({ email: data.email }, true);
+			const user = await this.userRepository.findOneWithPermissions(
+				{ email: data.email },
+				true
+			);
 			const isPasswordValid = await compare(data.password, user.password);
 
 			if (!isPasswordValid || !user.isActive || !user.isActivated) {
@@ -106,7 +115,9 @@ export class AuthenticationService {
 			logoUrl: 'data,',
 			projectName: this.configService.get('project.name'),
 			projectUrl: this.configService.get('project.url'),
-			resetUrl: `${this.configService.get('project.url')}/reset-password/${encodeURIComponent(token)}`
+			resetUrl: `${this.configService.get('project.url')}/reset-password/${encodeURIComponent(
+				token
+			)}`
 		});
 
 		await this.mailerService.sendMail({
@@ -138,7 +149,9 @@ export class AuthenticationService {
 			logoUrl: 'data,',
 			projectName: this.configService.get('project.name'),
 			projectUrl: this.configService.get('project.url'),
-			activationUrl: `${this.configService.get('project.url')}/activation/${encodeURIComponent(token)}`
+			activationUrl: `${this.configService.get(
+				'project.url'
+			)}/activation/${encodeURIComponent(token)}`
 		});
 
 		await this.mailerService.sendMail({

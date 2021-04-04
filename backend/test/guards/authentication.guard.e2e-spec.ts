@@ -26,6 +26,9 @@ describe('Authentication Guard', () => {
 	});
 
 	it(`should prevent access (unauthorized)`, async () => {
-		return request(app.getHttpServer()).get('/roles').set('Authorization', 'Bearer test-header').expect(401);
+		return request(app.getHttpServer())
+			.get('/roles')
+			.set('Authorization', 'Bearer test-header')
+			.expect(401);
 	});
 });

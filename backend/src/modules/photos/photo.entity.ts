@@ -1,5 +1,11 @@
 import { ID } from '../../core/types';
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import {
+	Column,
+	CreateDateColumn,
+	Entity,
+	PrimaryGeneratedColumn,
+	UpdateDateColumn
+} from 'typeorm';
 
 @Entity()
 export class Photo {

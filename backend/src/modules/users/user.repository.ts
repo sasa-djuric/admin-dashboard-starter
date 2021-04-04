@@ -9,7 +9,10 @@ import { User } from './user.entity';
 
 @EntityRepository(User)
 export class UserRepository extends Repository<User> {
-	public findOneWithPermissions(conditions, withPassword?: boolean): Promise<UserWithPermissions> {
+	public findOneWithPermissions(
+		conditions,
+		withPassword?: boolean
+	): Promise<UserWithPermissions> {
 		const query = this.createQueryBuilder('user')
 			.select([
 				'user.id as id',

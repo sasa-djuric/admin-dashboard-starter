@@ -8,7 +8,9 @@ import { RoleRepository } from './role.repository';
 
 @Injectable()
 export class RolesService {
-	constructor(@InjectRepository(RoleRepository) private readonly roleRepository: RoleRepository) {}
+	constructor(
+		@InjectRepository(RoleRepository) private readonly roleRepository: RoleRepository
+	) {}
 
 	async getAll(filters?: FiltersDto): Promise<WithFilters<Array<Role>>> {
 		return this.roleRepository.findAll(filters);

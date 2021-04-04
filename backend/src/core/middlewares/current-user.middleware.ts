@@ -7,7 +7,10 @@ import { AuthToken } from '../../modules/authentication/interfaces/auth-token.in
 
 @Injectable()
 export class CurrentUserMiddleware implements NestMiddleware {
-	constructor(private readonly redisService: RedisService, private readonly rolesService: RolesService) {}
+	constructor(
+		private readonly redisService: RedisService,
+		private readonly rolesService: RolesService
+	) {}
 
 	async use(req: any, res: any, next: () => void) {
 		try {
@@ -30,7 +33,9 @@ export class CurrentUserMiddleware implements NestMiddleware {
 
 			if (!role) {
 				role = await this.rolesService.getById(user.roleId);
-				this.redisService.getClient().setex(`role:${user.roleId}`, 24 * 60 * 60, JSON.stringify(role));
+				this.redisService
+					.getClient()
+					.setex(`role:${user.roleId}`, 24 * 60 * 60, JSON.stringify(role));
 			}
 
 			req.user = { ...user, permissions: role.permissions };

@@ -1,7 +1,13 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { Response } from 'express';
 import { AuthenticationService } from './authentication.service';
-import { LoginDto, ForgotPasswordDto, ResetPasswordDto, LoginResponseDto, ActivationDto } from './dto';
+import {
+	LoginDto,
+	ForgotPasswordDto,
+	ResetPasswordDto,
+	LoginResponseDto,
+	ActivationDto
+} from './dto';
 
 @Controller('authentication')
 export class AuthenticationController {

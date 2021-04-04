@@ -1,4 +1,10 @@
-import { BadRequestException, forwardRef, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+	BadRequestException,
+	forwardRef,
+	Inject,
+	Injectable,
+	NotFoundException
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserRepository } from './user.repository';
 import { ID, WithFilters } from '../../core/types';
@@ -76,8 +82,14 @@ export class UsersService {
 
 		if (data.profileImage) {
 			if (existingUser.profileImageId) {
-				profileImage = await this.photosService.update(existingUser.profileImageId, data.profileImage);
-				updatedUser = await this.userRepository.update({ id }, omit(['profileImage'], data));
+				profileImage = await this.photosService.update(
+					existingUser.profileImageId,
+					data.profileImage
+				);
+				updatedUser = await this.userRepository.update(
+					{ id },
+					omit(['profileImage'], data)
+				);
 			} else {
 				profileImage = await this.photosService.create(data.profileImage);
 				updatedUser = await this.userRepository.update(

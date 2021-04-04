@@ -1,4 +1,11 @@
-import { CACHE_MANAGER, CallHandler, ExecutionContext, Inject, Injectable, NestInterceptor } from '@nestjs/common';
+import {
+	CACHE_MANAGER,
+	CallHandler,
+	ExecutionContext,
+	Inject,
+	Injectable,
+	NestInterceptor
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { Cache } from 'cache-manager';
 import { Request } from 'express';
@@ -28,7 +35,10 @@ export class CacheInterceptor<Query, Params, Body> implements NestInterceptor {
 	async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
 		const { method, query, params, body }: Request = context.switchToHttp().getRequest();
 		const key = this.reflector.get(KEY, context.getHandler());
-		const cacheByParameters: CacheByParameters = this.reflector.get(CACHE_BY_PARAMETERS, context.getHandler());
+		const cacheByParameters: CacheByParameters = this.reflector.get(
+			CACHE_BY_PARAMETERS,
+			context.getHandler()
+		);
 		const ttl: number = this.reflector.get(TTL, context.getHandler());
 		const cacheParam = cacheByParameters({ query, params, body });
 		const cacheKey = cacheParam ? `${key}:${cacheParam}` : key;
