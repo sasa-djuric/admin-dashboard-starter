@@ -65,6 +65,8 @@
                     "executor": "@nrwl/web:dev-server",
                     "options": {
                         "buildTarget": "dashboard:build",
+                        "host": "0.0.0.0",
+                        "publicHost": "app.com",
                         "port": 3001
                     },
                     "configurations": {

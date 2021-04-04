@@ -11,14 +11,14 @@ services:
 
     mysql-db:
         container_name: mysql-db
-        build: ./db/mysql
+        build: ./infra/docker/db/mysql
         command: --default-authentication-plugin=mysql_native_password
         volumes:
             - mysql-db-volume:/var/lib/mysql
         ports:
             - 3306:3306
         expose:
-          - 3306
+            - 3306
         environment:
             MYSQL_DATABASE: main
             MYSQL_ROOT_PASSWORD: password
@@ -27,7 +27,7 @@ services:
 
     redis:
         container_name: redis
-        build: ./db/redis
+        build: ./infra/docker/db/redis
         volumes:
             - redis-volume:/data
         ports:
@@ -52,23 +52,25 @@ services:
             VIRTUAL_HOST: api.app.com
             VIRTUAL_PORT: 3000
 
-    # dashboard:
-    #     container_name: health-center_dashboard
-    #     build: ./dashboard
-    #     restart: always
-    #     stdin_open: true
-    #     ports:
-    #         - 3001:3001
-    #     volumes:
-    #         - '/app/node_modules'
-    #         - ./dashboard:/app
-    #     environment:
-    #         NODE_ENV: development
-    #         CHOKIDAR_USEPOLLING: 'true'
-    #         VIRTUAL_HOST: app.com
-    #         VIRTUAL_PORT: 3001
-    #     expose:
-    #         - 3001
+    dashboard:
+        container_name: health-center_dashboard
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile.dashboard.dev
+        restart: always
+        stdin_open: true
+        ports:
+            - 3001:3001
+        volumes:
+            - '/app/node_modules'
+            - ./frontend:/app
+        environment:
+            NODE_ENV: development
+            CHOKIDAR_USEPOLLING: 'true'
+            VIRTUAL_HOST: app.com
+            VIRTUAL_PORT: 3001
+        expose:
+            - 3001
 
 volumes:
     mysql-db-volume:
