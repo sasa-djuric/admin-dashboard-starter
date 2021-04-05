@@ -10,7 +10,8 @@ const config = (): ConnectionOptions => ({
 	database: process.env.MAIN_DATABASE || 'main',
 	entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
 	subscribers: [__dirname + '/../../**/*.entity.subscriber{.ts,.js}'],
-	migrations: ['src/migration/*{.ts,.js}'],
+	migrations: ['dist/providers/db/migration/*{.ts,.js}'],
+	migrationsRun: true,
 	synchronize: false,
 	logging: false,
 	cli: {
