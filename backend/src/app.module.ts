@@ -1,4 +1,5 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import { APP_FILTER } from '@nestjs/core';
 import { AppService } from './app.service';
 import { Role } from './modules/roles/role.entity';
 
@@ -12,6 +13,10 @@ import { UsersService } from './modules/users/users.service';
 import { UserRepository } from './modules/users/user.repository';
 import { RolesModule } from './modules/roles/roles.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
+import { LoggingModule } from './modules/logging/logging.module';
+import { RedisModule } from 'nestjs-redis';
+import { RolesService } from './modules/roles/roles.service';
+import { PhotosModule } from './modules/photos/photos.module';
 
 // Config
 import { appConfig } from 'src/config/app';
@@ -21,12 +26,10 @@ import { redisConfig } from './config/providers/redis.config';
 import { projectConfig } from './config/project';
 import { authenticationConfig } from './config/authentication';
 
-// Middlewares
-import { CurrentUserMiddleware } from 'src/core/middlewares/current-user.middleware';
-import { CacheModule } from 'src/core/cache/cache.module';
-import { RedisModule } from 'nestjs-redis';
-import { RolesService } from './modules/roles/roles.service';
-import { PhotosModule } from './modules/photos/photos.module';
+// Core
+import { UnhandledExceptionFilter } from './core/filters';
+import { CurrentUserMiddleware } from './core/middlewares/current-user.middleware';
+import { CacheModule } from './core/cache/cache.module';
 
 // Utils
 import { join } from 'path';
@@ -68,9 +71,19 @@ import { join } from 'path';
 		RolesModule,
 		UsersModule,
 		PhotosModule,
-		CacheModule
+		CacheModule,
+		LoggingModule
 	],
-	providers: [AppService, UsersService, RolesService, ConfigService]
+	providers: [
+		AppService,
+		UsersService,
+		RolesService,
+		ConfigService,
+		{
+			provide: APP_FILTER,
+			useClass: UnhandledExceptionFilter
+		}
+	]
 })
 export class AppModule {
 	constructor(private readonly appService: AppService) {}
