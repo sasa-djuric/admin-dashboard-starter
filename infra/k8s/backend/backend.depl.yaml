@@ -59,7 +59,7 @@ spec:
 
 
                     - name: PROJECT_NAME
-                      value: Startup
+                      value: App
                     - name: PROJECT_DOMAIN
                       value: app.com
                     - name: PROJECT_URL
