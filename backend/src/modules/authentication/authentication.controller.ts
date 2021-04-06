@@ -23,7 +23,7 @@ export class AuthenticationController {
 		const { refreshToken, ...result } = await this.authService.login(data);
 
 		response.cookie('refresh-token', refreshToken, {
-			sameSite: 'strict',
+			sameSite: 'none',
 			httpOnly: true,
 			secure: process.env.NODE_ENV !== 'development',
 			expires: new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000),

@@ -70,7 +70,12 @@ export class UsersService {
 			await this.authenticationService.handleAccountActivation(createdUser);
 			return { ...createdUser, profileImage: profileImage?.url ?? null };
 		} catch (err) {
+			if (err.code === 'ER_DUP_ENTRY') {
+				throw new BadRequestException('User with the given email already exists');
+			}
+
 			this.userRepository.delete({ id: createdUser.id });
+
 			throw err;
 		}
 	}
