@@ -1,3 +1,4 @@
+# DEVELOPMENT
 version: '3'
 services:
     nginx-proxy:
