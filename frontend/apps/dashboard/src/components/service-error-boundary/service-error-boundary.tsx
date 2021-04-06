@@ -5,7 +5,7 @@ import { QueryErrorResetBoundary } from 'react-query-service';
 interface ErrorBoundaryProps {}
 
 interface ErrorBoundaryState {
-	error: any;
+	error: Error;
 }
 
 class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
@@ -13,11 +13,13 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 		error: null
 	};
 
-	static getDerivedStateFromError(error: any) {
+	static getDerivedStateFromError(error: Error) {
 		return { error: true };
 	}
 
-	componentDidCatch(error: any, errorInfo: any) {}
+	componentDidCatch(error: Error, errorInfo: unknown) {
+		//
+	}
 
 	onReset() {
 		this.setState(state => ({
@@ -29,12 +31,12 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 	render() {
 		return (
 			<QueryErrorResetBoundary>
-				{({ reset }: any) =>
+				{({ reset }) =>
 					this.state.error ? (
 						<Result
 							status='error'
-							title='Submission Failed'
-							subTitle='Please check and modify the following information before resubmitting.'
+							title='Error Happen'
+							subTitle='Please try again.'
 							extra={[
 								<Button
 									key='error-boundary-reset'

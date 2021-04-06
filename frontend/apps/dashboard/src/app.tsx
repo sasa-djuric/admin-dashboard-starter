@@ -5,6 +5,7 @@ import { AppRoutes } from './lib/routing';
 
 // Components
 import Spinner from './components/spinner';
+import ErrorBoundary from './components/service-error-boundary';
 
 // Containers
 import AppShell from './templates/app-shell';
@@ -43,12 +44,14 @@ function App() {
 	return (
 		<div>
 			<AppShell>
-				<Suspense fallback={<Spinner size='large' />}>
-					<Switch>
-						<Route path='/' exact={true} component={DashboardView} />
-						<AppRoutes apps={apps} />
-					</Switch>
-				</Suspense>
+				<ErrorBoundary>
+					<Suspense fallback={<Spinner size='large' />}>
+						<Switch>
+							<Route path='/' exact={true} component={DashboardView} />
+							<AppRoutes apps={apps} />
+						</Switch>
+					</Suspense>
+				</ErrorBoundary>
 			</AppShell>
 		</div>
 	);

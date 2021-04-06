@@ -8,6 +8,7 @@ import styles from './app-unauth.module.scss';
 
 // Components
 import Spinner from './components/spinner';
+import ErrorBoundary from './components/service-error-boundary';
 
 // Hooks
 import useAuth from './hooks/use-auth';
@@ -23,13 +24,15 @@ function UnauthenticatedApp() {
 
 	return (
 		<div className={styles['app-unauth']}>
-			<Suspense fallback={<Spinner size='large' />}>
-				{!authState.isLoading && isInited ? (
-					<AppRoutes apps={[authenticationApp]} defaultPath='/login' />
-				) : (
-					<Spinner size='large' />
-				)}
-			</Suspense>
+			<ErrorBoundary>
+				<Suspense fallback={<Spinner size='large' />}>
+					{!authState.isLoading && isInited ? (
+						<AppRoutes apps={[authenticationApp]} defaultPath='/login' />
+					) : (
+						<Spinner size='large' />
+					)}
+				</Suspense>
+			</ErrorBoundary>
 		</div>
 	);
 }
