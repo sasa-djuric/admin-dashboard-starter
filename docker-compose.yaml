@@ -1,4 +1,3 @@
-# DEVELOPMENT
 version: '3'
 services:
     nginx-proxy:
@@ -11,7 +10,7 @@ services:
             - /var/run/docker.sock:/tmp/docker.sock:ro
 
     mysql-db:
-        container_name: mysql-db
+        container_name: admin_mysql-db
         build: ./infra/docker/db/mysql
         command: --default-authentication-plugin=mysql_native_password
         volumes:
@@ -20,14 +19,13 @@ services:
             - 3306:3306
         expose:
             - 3306
-        environment:
-            MYSQL_DATABASE: main
-            MYSQL_ROOT_PASSWORD: password
+        env_file:
+            - mysql.env
         security_opt:
             - seccomp:unconfined
 
     redis:
-        container_name: redis
+        container_name: admin_redis
         build: ./infra/docker/db/redis
         volumes:
             - redis-volume:/data
@@ -35,7 +33,7 @@ services:
             - 6379:6379
 
     backend:
-        container_name: health-center_backend
+        container_name: admin_backend
         restart: always
         build:
             context: ./backend
@@ -49,13 +47,11 @@ services:
         depends_on:
             - mysql-db
             - redis
-        environment:
-            VIRTUAL_HOST: api.app.com
-            VIRTUAL_PORT: 3000
-            NODE_ENV: development
+        env_file:
+            - .env
 
     dashboard:
-        container_name: health-center_dashboard
+        container_name: admin_dashboard
         build:
             context: ./frontend
             dockerfile: Dockerfile.dashboard.dev

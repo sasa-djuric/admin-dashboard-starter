@@ -19,7 +19,7 @@ import { RolesService } from './modules/roles/roles.service';
 import { PhotosModule } from './modules/photos/photos.module';
 
 // Config
-import { appConfig } from 'src/config/app';
+import { appConfig } from './config/app';
 import { dbConfig } from './config/providers/main-db.config';
 import { mailConfig } from './config/mail';
 import { redisConfig } from './config/providers/redis.config';
@@ -37,8 +37,7 @@ import { join } from 'path';
 @Module({
 	imports: [
 		ConfigModule.forRoot({
-			envFilePath: ['.env.development.local'],
-			ignoreEnvFile: !(!process.env.NODE_ENV || process.env.NODE_ENV === 'development'),
+			ignoreEnvFile: true,
 			load: [
 				appConfig,
 				dbConfig,

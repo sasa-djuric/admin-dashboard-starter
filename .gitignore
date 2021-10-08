@@ -23,3 +23,6 @@
 **.secret.yaml**
 
 TODO.md
+
+.env
+mysql.env
