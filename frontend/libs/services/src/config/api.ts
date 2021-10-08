@@ -1,3 +1,5 @@
+console.log(process.env);
+
 export default {
-    baseURL: 'http://api.app.com/v1',
+	baseURL: `${process.env.NX_API_BASE_URL}/v1`
 };
