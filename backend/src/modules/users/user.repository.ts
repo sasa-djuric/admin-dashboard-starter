@@ -1,6 +1,6 @@
-import { FiltersDto } from 'src/core/dto';
-import { ID, WithFilters } from 'src/core/types';
-import { applyFiltersAndExecute } from 'src/core/utils';
+import { FiltersDto } from '../../core/dto';
+import { ID, WithFilters } from '../../core/types';
+import { applyFiltersAndExecute } from '../../core/utils';
 import { EntityRepository, Repository } from 'typeorm';
 import { Photo } from '../photos/photo.entity';
 import { Role } from '../roles/role.entity';

@@ -1,8 +1,8 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { decode } from 'jsonwebtoken';
 import { RedisService } from 'nestjs-redis';
-import { Role } from 'src/modules/roles/role.entity';
-import { RolesService } from 'src/modules/roles/roles.service';
+import { Role } from '../../modules/roles/role.entity';
+import { RolesService } from '../../modules/roles/roles.service';
 import { AuthToken } from '../../modules/authentication/interfaces/auth-token.interface';
 
 @Injectable()

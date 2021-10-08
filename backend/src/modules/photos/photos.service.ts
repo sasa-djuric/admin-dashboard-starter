@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Photo } from './photo.entity';
 import { Repository } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import { ProjectConfig } from 'src/config/project';
+import { ProjectConfig } from '../../config/project';
 import { StorageType } from '../../config/multer';
 import { ID } from '../../core/types';
 import * as path from 'path';

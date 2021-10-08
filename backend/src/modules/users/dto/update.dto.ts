@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsEmail, IsOptional, Length } from 'class-validator';
-import { ID } from 'src/core/types';
+import { ID } from '../../../core/types';
 
 export class UpdateDto {
 	@ApiProperty()

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FiltersDto } from 'src/core/dto/filters.dto';
-import { ID, WithFilters } from 'src/core/types';
+import { FiltersDto } from '../../core/dto/filters.dto';
+import { ID, WithFilters } from '../../core/types';
 import { CreateRoleDto, UpdateRoleDto } from './dto';
 import { Role } from './role.entity';
 import { RoleRepository } from './role.repository';

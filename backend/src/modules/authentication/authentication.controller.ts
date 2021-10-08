@@ -1,7 +1,7 @@
 import { Body, Controller, Post, Res } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
-import { ProjectConfig } from 'src/config/project';
+import { ProjectConfig } from '../../config/project';
 import { AuthenticationService } from './authentication.service';
 import {
 	LoginDto,

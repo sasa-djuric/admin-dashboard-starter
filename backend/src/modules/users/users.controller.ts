@@ -13,14 +13,14 @@ import {
 	UseInterceptors
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { FiltersDto, IdParamDto } from 'src/core/dto';
-import { AuthenticationGuard } from 'src/core/guards';
-import { ID, WithFilters } from 'src/core/types';
+import { FiltersDto, IdParamDto } from '../../core/dto';
+import { AuthenticationGuard } from '../../core/guards';
+import { ID, WithFilters } from '../../core/types';
 import { CreateDto, UpdateDto, SwitchRoleDto } from './dto';
 import { UserResponse } from './interface';
 import { User } from './user.entity';
 import { UsersService } from './users.service';
-import { multerConfig, StorageType } from 'src/config/multer';
+import { multerConfig, StorageType } from '../../config/multer';
 import { ApiParam, ApiQuery } from '@nestjs/swagger';
 
 @Controller('users')

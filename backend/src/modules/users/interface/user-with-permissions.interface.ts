@@ -1,4 +1,4 @@
-import { Permissions } from 'src/core/types';
+import { Permissions } from '../../../core/types';
 import { User } from '../user.entity';
 
 export interface UserWithPermissions extends User {

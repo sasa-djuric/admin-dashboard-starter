@@ -12,7 +12,7 @@ const config = (): ConnectionOptions => ({
 	subscribers: [__dirname + '/../../**/*.entity.subscriber{.ts,.js}'],
 	migrations: ['dist/providers/db/migration/*{.ts,.js}'],
 	migrationsRun: true,
-	synchronize: false,
+	synchronize: true,
 	logging: false,
 	cli: {
 		entitiesDir: 'src/providers/db/entity',
