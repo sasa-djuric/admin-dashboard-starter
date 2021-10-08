@@ -4,6 +4,7 @@ import { Test } from '@nestjs/testing';
 import { AuthenticationGuard } from '../../src/core/guards/authentication.guard';
 import * as request from 'supertest';
 import { AppModule } from '../../src/app.module';
+import { TokenService } from 'src/modules/authentication/token/token.service';
 
 function createTestModule(guard) {
 	return Test.createTestingModule({
@@ -21,7 +22,9 @@ describe('Authentication Guard', () => {
 	let app: INestApplication;
 
 	beforeEach(async () => {
-		app = (await createTestModule(new AuthenticationGuard())).createNestApplication();
+		app = (
+			await createTestModule(new AuthenticationGuard({} as TokenService))
+		).createNestApplication();
 		await app.init();
 	});
 
