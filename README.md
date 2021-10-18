@@ -5,8 +5,8 @@
 -   TypeScript - https://www.typescriptlang.org
 -   NodeJs - https://nodejs.org
 -   NestJs - https://nestjs.com
--   ReactJs
--   NX
+-   ReactJs - https://reactjs.org
+-   NX - https://nx.dev
 -   MySql - https://www.mysql.com
 -   Redis - https://redis.io
 -   NginX - https://www.nginx.com
