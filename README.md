@@ -8,7 +8,7 @@
 -   ReactJs
 -   NX
 -   MySql - https://www.mysql.com
--   Redis - https://redis.io/
+-   Redis - https://redis.io
 -   NginX - https://www.nginx.com
 -   Docker - https://www.docker.com
 
