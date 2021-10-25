@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: dashboard-depl
+spec:
+    replicas: 1
+    selector:
+        matchLabels:
+            app: dashboard
+    template:
+        metadata:
+            labels:
+                app: dashboard
+        spec:
+            containers:
+                - name: dashboard
+                  image: frontend
+                  env:
+                    - name: NX_API_BASE_URL
+                      value: http://api.app.com
+                  ports:
+                      - containerPort: 80
+                  resources:
+                    limits:
+                        memory: 2Gi
+                        cpu: "1"
+                    requests:
+                        memory: 256Mi
+                        cpu: "0.2"

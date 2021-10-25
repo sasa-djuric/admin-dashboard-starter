@@ -13,7 +13,7 @@ spec:
                     pathType: Prefix
                     backend:
                         service:
-                            name: backend-srv
+                            name: backend
                             port:
                                 number: 3000
 
@@ -24,6 +24,6 @@ spec:
                     pathType: Prefix
                     backend:
                         service:
-                            name: dashboard-srv
+                            name: dashboard
                             port:
                                 number: 80

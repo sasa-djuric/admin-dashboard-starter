@@ -14,56 +14,36 @@ spec:
         spec:
             containers:
                 - name: backend
-                  image: app/backend
-                  imagePullPolicy: Never
+                  image: backend
                   ports:
                       - containerPort: 3000
+                  envFrom:
+                    - configMapRef:
+                          name: backend-config
                   env:
-                    - name: NODE_ENV
-                      value: production
-
-
-                    - name: MAIN_DATABASE_HOST
-                      value: main-db
-
-
-                    - name: MAIN_DATABASE_USERNAME
+                    - name: MYSQL_USERNAME
                       valueFrom:
                           secretKeyRef:
-                              name: main-db-secrets
-                              key: main_database_username
+                              name: mysql-secrets
+                              key: MYSQL_ROOT_USERNAME
 
-                    - name: MAIN_DATABASE_PASSWORD
+                    - name: MYSQL_PASSWORD
                       valueFrom:
                           secretKeyRef:
-                              name: main-db-secrets
-                              key: main_database_password
+                              name: mysql-secrets
+                              key: MYSQL_ROOT_PASSWORD
 
-                    - name: MAIN_DATABASE
+                    - name: MYSQL
                       valueFrom:
                         secretKeyRef:
-                          name: main-db-secrets
-                          key: main_database
-
-
-                    - name: REDIS_HOST
-                      value: redis
-                    - name: REDIS_PORT
-                      value: '6379'
+                          name: mysql-secrets
+                          key: MYSQL_DATABASE
 
                     - name: JWT_SECRET
                       valueFrom:
                         secretKeyRef:
                           name: other-secrets
                           key: jwt-secret
-
-
-                    - name: PROJECT_NAME
-                      value: App
-                    - name: PROJECT_DOMAIN
-                      value: app.com
-                    - name: PROJECT_URL
-                      value: http://app.com
 
                     - name: MAIL_HOST
                       valueFrom:
@@ -95,7 +75,6 @@ spec:
                           name: email-secret
                           key: mail_default_from
 
-
                     - name: USER_EMAIL
                       valueFrom:
                         secretKeyRef:
@@ -109,4 +88,15 @@ spec:
                           key: user_password
 
                     - name: USER_NAME
-                      value: Admin
+                      valueFrom:
+                        secretKeyRef:
+                          name: default-user-secret
+                          key: user
+
+                  resources:
+                       limits:
+                            memory: 1Gi
+                            cpu: "1"
+                       requests:
+                            memory: 256Mi
+                            cpu: "0.2"

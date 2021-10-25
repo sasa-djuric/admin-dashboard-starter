@@ -1,9 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
-    name: redis-depl
+    name: redis
 spec:
     replicas: 1
+    serviceName: redis
     selector:
         matchLabels:
             app: redis
@@ -23,6 +24,13 @@ spec:
                   volumeMounts:
                   - name: redis-volume
                     mountPath: /data
+                  resources:
+                      limits:
+                          memory: 1Gi
+                          cpu: "1"
+                      requests:
+                          memory: 256Mi
+                          cpu: "0.2"
 
             volumes:
             - name: redis-volume

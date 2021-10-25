@@ -1,0 +1,15 @@
+docker_build('backend', './backend', dockerfile="./backend/Dockerfile.dev", live_update=[
+                 sync('./backend', '/app'),
+                 run('cd /app && npm install',
+                     trigger=['./package.json', './package-lock.json'])])
+
+docker_build('frontend', './frontend',
+             dockerfile="./frontend/Dockerfile.dashboard.dev", live_update=[
+                 sync('./frontend', '/app'),
+                 run('cd /app && npm install',
+                     trigger=['./package.json', './package-lock.json'])])
+
+k8s_yaml(listdir('./infra/k8s', True), allow_duplicates=True)
+
+k8s_resource('dashboard-depl', port_forwards=3001)
+k8s_resource('backend-depl', port_forwards=3000)

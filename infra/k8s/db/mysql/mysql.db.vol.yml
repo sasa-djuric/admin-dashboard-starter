@@ -1,24 +1,24 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: redis-pv-volume
+  name: mysql-pv-volume
   labels:
     type: local
 spec:
-  storageClassName: manual
+  storageClassName: hostpath
   capacity:
-    storage: 20Gi
+    storage: 1Gi
   accessModes:
     - ReadWriteOnce
   hostPath:
-    path: "/data"
+    path: "/var/lib/mysql"
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-    name: redis-pv-claim
+    name: mysql-pv-claim
 spec:
-    storageClassName: manual
+    storageClassName: hostpath
     accessModes:
         - ReadWriteOnce
     resources:
