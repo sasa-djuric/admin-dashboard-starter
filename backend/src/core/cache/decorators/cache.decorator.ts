@@ -1,10 +1,11 @@
 import { applyDecorators, SetMetadata, UseInterceptors } from '@nestjs/common';
 import { CACHE_BY_PARAMETERS, KEY, TTL } from '../cache.constants';
-import { CacheByParameters, CacheInterceptor } from '../interceptors';
+import { CacheInterceptor } from '../interceptors';
+import { ByParameters, CacheKey } from '../types';
 
-export const Cache = <Query = any, Params = any, Body = any>(
-	key: string,
-	params?: CacheByParameters<Query, Params, Body>,
+export const Cache = <Query = any, Params = any, Body = any, Response = any>(
+	key: CacheKey,
+	params?: ByParameters<Query, Params, Body, Response>,
 	ttl?: number
 ) =>
 	applyDecorators(

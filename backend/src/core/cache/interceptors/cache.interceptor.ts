@@ -12,16 +12,8 @@ import { Request } from 'express';
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CACHE_BY_PARAMETERS, KEY, TTL } from '../cache.constants';
-
-interface CacheByParametersParams<Query, Params, Body> {
-	query: Query;
-	params: Params;
-	body: Body;
-}
-
-export type CacheByParameters<Query = any, Params = any, Body = any> = (
-	params: CacheByParametersParams<Query, Params, Body>
-) => string | number;
+import { ByParameters } from '../types';
+import { generateKey } from '../utils';
 
 const REFLECTOR = 'Reflector';
 
@@ -33,17 +25,18 @@ export class CacheInterceptor<Query, Params, Body> implements NestInterceptor {
 	) {}
 
 	async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
-		const { method, query, params, body }: Request = context.switchToHttp().getRequest();
+		const request: Request = context.switchToHttp().getRequest();
+		const { method, query, params, body } = request;
 		const key = this.reflector.get(KEY, context.getHandler());
-		const cacheByParameters: CacheByParameters = this.reflector.get(
+		const cacheByParameters: ByParameters = this.reflector.get(
 			CACHE_BY_PARAMETERS,
 			context.getHandler()
 		);
 		const ttl: number = this.reflector.get(TTL, context.getHandler());
-		const cacheParam = cacheByParameters({ query, params, body });
-		const cacheKey = cacheParam ? `${key}:${cacheParam}` : key;
 
 		if (method === 'GET') {
+			const cacheParam = cacheByParameters?.({ query, params, body, request });
+			const cacheKey = generateKey(key, cacheParam);
 			const cached = await this.cacheManager.get(cacheKey);
 
 			if (cached) {
@@ -54,14 +47,22 @@ export class CacheInterceptor<Query, Params, Body> implements NestInterceptor {
 		return next.handle().pipe(
 			map(response => {
 				if (response) {
+					const cacheParamWithResponse = cacheByParameters?.({
+						query,
+						params,
+						body,
+						request,
+						response
+					});
+					const cacheKeyWithRepsonse = generateKey(key, cacheParamWithResponse);
+
 					switch (method) {
 						case 'GET':
+							this.cacheManager.set(cacheKeyWithRepsonse, response, ttl);
+							break;
 						case 'POST':
 						case 'PUT':
-							this.cacheManager.set(cacheKey, response, ttl);
-							break;
-						case 'DELETE':
-							this.cacheManager.del(cacheKey);
+							this.cacheManager.set(cacheKeyWithRepsonse, response, ttl);
 							break;
 						default:
 					}

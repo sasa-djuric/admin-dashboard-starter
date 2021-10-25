@@ -22,6 +22,10 @@ import { User } from './user.entity';
 import { UsersService } from './users.service';
 import { multerConfig, StorageType } from '../../config/multer';
 import { ApiParam, ApiQuery } from '@nestjs/swagger';
+import { Cache, InvalidateCache } from '../../core/cache';
+
+const CACHE_NAMESPACE = 'users';
+const TTL = 24 * 60 * 60;
 
 @Controller('users')
 @UseGuards(AuthenticationGuard)
@@ -35,6 +39,7 @@ export class UsersController {
 	}
 
 	@Get('/:id')
+	@Cache<any, IdParamDto>(CACHE_NAMESPACE, ({ params }) => params.id, TTL)
 	@ApiParam({ name: 'id', required: true })
 	getById(@Param() params: IdParamDto): Promise<User> {
 		return this.usersService.getById(params.id);
@@ -42,6 +47,7 @@ export class UsersController {
 
 	@Post('/')
 	@UseInterceptors(FileInterceptor('profileImage', multerConfig({ type: StorageType.Photos })))
+	@Cache<any, any, any, UserResponse>(CACHE_NAMESPACE, ({ response }) => response.id, TTL)
 	create(
 		@Body() data: CreateDto,
 		@UploadedFile() profileImage: Express.Multer.File
@@ -50,8 +56,8 @@ export class UsersController {
 	}
 
 	@Put('/:id')
-	@ApiParam({ name: 'id', required: true })
 	@UseInterceptors(FileInterceptor('profileImage', multerConfig({ type: StorageType.Photos })))
+	@Cache<any, IdParamDto>(CACHE_NAMESPACE, ({ params }) => params.id, TTL)
 	@ApiParam({ name: 'id', required: true })
 	update(
 		@Param() params: IdParamDto,
@@ -62,6 +68,7 @@ export class UsersController {
 	}
 
 	@Delete('/:id')
+	@InvalidateCache<any, IdParamDto>(CACHE_NAMESPACE, ({ params }) => params.id)
 	@ApiParam({ name: 'id', required: true })
 	remove(@Param() params: IdParamDto): Promise<{ id: ID }> {
 		return this.usersService.remove(params.id);
