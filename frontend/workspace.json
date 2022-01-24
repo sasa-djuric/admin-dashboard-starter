@@ -1,18 +1,5 @@
 {
 	"version": 2,
-	"cli": { "defaultCollection": "@nrwl/react" },
-	"defaultProject": "dashboard",
-	"generators": {
-		"@nrwl/react": {
-			"application": {
-				"style": "scss",
-				"linter": "eslint",
-				"babel": true
-			},
-			"component": { "style": "scss" },
-			"library": { "style": "scss", "linter": "eslint" }
-		}
-	},
 	"projects": {
 		"dashboard": {
 			"root": "apps/dashboard",
@@ -89,7 +76,8 @@
 						"passWithNoTests": true
 					}
 				}
-			}
+			},
+			"tags": []
 		},
 		"dashboard-e2e": {
 			"root": "apps/dashboard-e2e",
@@ -115,7 +103,9 @@
 						"lintFilePatterns": ["apps/dashboard-e2e/**/*.{js,ts}"]
 					}
 				}
-			}
+			},
+			"tags": [],
+			"implicitDependencies": ["dashboard"]
 		},
 		"services": {
 			"root": "libs/services",
@@ -136,7 +126,8 @@
 						"passWithNoTests": true
 					}
 				}
-			}
+			},
+			"tags": []
 		}
 	}
 }

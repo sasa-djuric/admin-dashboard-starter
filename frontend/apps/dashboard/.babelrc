@@ -1,11 +1,11 @@
 {
-    "presets": ["@nrwl/react/babel"],
-    "plugins": [
-        [
-            "@babel/plugin-transform-react-jsx",
-            {
-                "runtime": "automatic"
-            }
-        ]
-    ]
+	"presets": ["@nrwl/react/babel"],
+	"plugins": [
+		[
+			"@babel/plugin-transform-react-jsx",
+			{
+				"runtime": "automatic"
+			}
+		]
+	]
 }
