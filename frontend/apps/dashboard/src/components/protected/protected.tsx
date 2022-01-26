@@ -1,22 +1,18 @@
 import { Permissions } from '@app/services';
-import { Fragment } from 'react';
-import usePermissions from '../../hooks/use-permissions';
+import usePermissions from '../../apps/authentication/hooks/use-permissions';
 
 interface ProtectedProps {
-    permissions: Array<Permissions>;
+	permissions: Array<Permissions>;
 }
 
-const Protected: React.FunctionComponent<ProtectedProps> = ({
-    permissions,
-    children,
-}) => {
-    const havePermission = usePermissions();
+const Protected: React.FunctionComponent<ProtectedProps> = ({ permissions, children }) => {
+	const havePermission = usePermissions();
 
-    if (!havePermission(permissions)) {
-        return <Fragment />;
-    }
+	if (!havePermission(permissions)) {
+		return null;
+	}
 
-    return <Fragment>{children}</Fragment>;
+	return <>{children}</>;
 };
 
 export default Protected;

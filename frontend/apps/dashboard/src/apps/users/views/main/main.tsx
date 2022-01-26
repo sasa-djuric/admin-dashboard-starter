@@ -1,7 +1,7 @@
 // Libs
 import { FunctionComponent, useState } from 'react';
 import { useQuery } from 'react-query-service';
-import { Link, RouteComponentProps } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 // Components
 import { Button, Card, Divider, PageHeader, Row, Space, Table } from 'antd';
@@ -74,10 +74,12 @@ const mapData = (data: Array<User>): Array<TableRow> =>
 		status: item.isActive ? 'Active' : 'Inactive'
 	}));
 
-interface UsersMainViewProps extends RouteComponentProps<{ id?: string }> {}
+interface UsersMainViewProps {}
 
-const UsersMainView: FunctionComponent<UsersMainViewProps> = ({ history, match }) => {
-	const id = match.params.id ? +match.params.id : undefined;
+const UsersMainView: FunctionComponent<UsersMainViewProps> = () => {
+	const navigate = useNavigate();
+	const params = useParams();
+	const id = params.id ? +params.id : undefined;
 	const isMaster = typeof id !== 'number';
 	const [search, setSearch] = useState('');
 	const [page, setPage] = useState(1);
@@ -93,11 +95,11 @@ const UsersMainView: FunctionComponent<UsersMainViewProps> = ({ history, match }
 	);
 
 	function onNew() {
-		history.push(`/${settings.name}${!isMaster ? `/${id}` : ''}/new`);
+		navigate(`/${settings.name}${!isMaster ? `/${id}` : ''}/new`);
 	}
 
 	function onEdit(row: TableRow, index: number) {
-		history.push(`/${settings.name}/${row.id}/edit`);
+		navigate(`/${settings.name}/${row.id}/edit`);
 	}
 
 	function onDelete(row: TableRow, index: number) {
@@ -127,7 +129,7 @@ const UsersMainView: FunctionComponent<UsersMainViewProps> = ({ history, match }
 					</Protected>
 				]}
 				style={{ marginBottom: '24px' }}
-				onBack={id ? () => history.goBack() : undefined}
+				onBack={id ? () => navigate(-1) : undefined}
 			/>
 
 			<Card>

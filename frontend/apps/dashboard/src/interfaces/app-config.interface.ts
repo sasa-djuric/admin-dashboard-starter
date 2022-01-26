@@ -1,6 +1,6 @@
-import { BaseRoute } from './base-route.interface';
+import { RouteObject } from 'react-router';
 
 export interface App {
 	name?: string;
-	routes: Array<BaseRoute>;
+	routes: Array<RouteObject>;
 }

@@ -1,29 +1,22 @@
 import { Permissions } from '@app/services';
-import { Redirect, Route, RouteProps } from 'react-router';
-import usePermissions from '../../hooks/use-permissions';
+import { Navigate } from 'react-router';
+import usePermissions from '../../apps/authentication/hooks/use-permissions';
 
-interface ProtectedRouteProps extends RouteProps {
-    permissions?: Array<Permissions>;
+interface ProtectedRouteProps {
+	permissions?: Array<Permissions>;
 }
 
 const ProtectedRoute: React.FunctionComponent<ProtectedRouteProps> = ({
-    component: Component,
-    render,
-    permissions,
-    ...props
+	permissions,
+	children
 }) => {
-    const havePermission = usePermissions();
+	const havePermission = usePermissions();
 
-    return (
-        <Route
-            {...props}
-            render={(props) => {
-                if (!Component || !havePermission(permissions))
-                    return <Redirect to="/login" />;
-                return <Component {...props} />;
-            }}
-        />
-    );
+	if (!havePermission(permissions)) {
+		return <Navigate to='/' />;
+	}
+
+	return <>{children}</>;
 };
 
 export default ProtectedRoute;

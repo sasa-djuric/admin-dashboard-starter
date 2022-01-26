@@ -5,12 +5,13 @@ import '../../../node_modules/antd/dist/antd.css';
 // Libs
 import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
-import { QueryClientProvider, ReactQueryDevtools } from 'react-query-service';
+import { QueryClientProvider } from 'react-query-service';
 import { init } from '@app/services';
 
 // Components
 import { Spin } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
+import ErrorBoundary from './components/service-error-boundary';
 
 // Containers
 import App from './app';
@@ -19,11 +20,10 @@ import App from './app';
 import queryClient from './config/query-client';
 import { isDev, mockAPI } from './config/dev';
 
-// Contexts
-import AuthProvider from './contexts/auth/auth.context';
+import Authentication from './apps/authentication';
 
 if (isDev && mockAPI) {
-    require('@app/services/mocks').startMockServer();
+	require('@app/services/mocks').startMockServer();
 }
 
 init(queryClient);
@@ -31,13 +31,14 @@ init(queryClient);
 Spin.setDefaultIndicator(<LoadingOutlined />);
 
 ReactDOM.render(
-    <BrowserRouter>
-        <QueryClientProvider client={queryClient}>
-            {isDev && <ReactQueryDevtools />}
-            <AuthProvider>
-                <App />
-            </AuthProvider>
-        </QueryClientProvider>
-    </BrowserRouter>,
-    document.getElementById('root')
+	<BrowserRouter>
+		<QueryClientProvider client={queryClient}>
+			<ErrorBoundary>
+				<Authentication>
+					<App />
+				</Authentication>
+			</ErrorBoundary>
+		</QueryClientProvider>
+	</BrowserRouter>,
+	document.getElementById('root')
 );

@@ -1,14 +1,15 @@
 import { notification } from 'antd';
-import { Redirect, RouteComponentProps } from 'react-router';
+import { Navigate, useParams, useNavigate } from 'react-router';
 import CreatePasswordForm from '../../forms/create-password';
-import AuthenticationPage from '../../templates/page';
+import Layout from '../../layout';
 
-interface CreatePasswordViewProps extends RouteComponentProps<{ token: string }> {
+interface CreatePasswordViewProps {
 	type: 'activation' | 'reset';
 }
 
-const CreatePasswordView: React.FunctionComponent<CreatePasswordViewProps> = ({ type, match, history }) => {
-	const token = match.params.token;
+const CreatePasswordView: React.FunctionComponent<CreatePasswordViewProps> = ({ type }) => {
+	const navigate = useNavigate();
+	const { token } = useParams();
 
 	function onSuccess() {
 		const messages = {
@@ -20,15 +21,19 @@ const CreatePasswordView: React.FunctionComponent<CreatePasswordViewProps> = ({ 
 			message: messages[type]
 		});
 
-		history.push('/login');
+		navigate('/login');
 	}
 
-	if (!token) return <Redirect to='/login' />;
+	if (!token) return <Navigate to='/login' />;
 
 	return (
-		<AuthenticationPage>
-			<CreatePasswordForm type={type} token={decodeURIComponent(token)} onSuccess={onSuccess} />
-		</AuthenticationPage>
+		<Layout>
+			<CreatePasswordForm
+				type={type}
+				token={decodeURIComponent(token)}
+				onSuccess={onSuccess}
+			/>
+		</Layout>
 	);
 };
 

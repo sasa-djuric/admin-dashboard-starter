@@ -27,8 +27,8 @@
 						"production": {
 							"fileReplacements": [
 								{
-									"replace": "apps/dashboard/src/environments/environment.ts",
-									"with": "apps/dashboard/src/environments/environment.prod.ts"
+									"replace": "apps/dashboard/environments/environment.ts",
+									"with": "apps/dashboard/environments/environment.prod.ts"
 								}
 							],
 							"optimization": true,
@@ -54,11 +54,13 @@
 						"buildTarget": "dashboard:build",
 						"host": "0.0.0.0",
 						"publicHost": "app.com",
-						"port": 80
+						"port": 80,
+						"hmr": true
 					},
 					"configurations": {
 						"production": {
-							"buildTarget": "dashboard:build:production"
+							"buildTarget": "dashboard:build:production",
+							"hmr": false
 						}
 					}
 				},

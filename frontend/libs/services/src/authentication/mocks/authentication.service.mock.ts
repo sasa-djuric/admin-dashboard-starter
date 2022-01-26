@@ -34,22 +34,28 @@ const login = rest.post<LoginRequest>(`${api.baseURL}/authentication/login`, (re
 	);
 });
 
-const forgotPasssword = rest.post(`${api.baseURL}/authentication/password/forgot`, (req, res, ctx) => {
-	return res(
-		ctx.delay(RESPONSE_DELAY),
-		ctx.json({})
-		// ctx.status(401),
-		// ctx.json({ message: 'Invalid email or password' })
-	);
-});
+const forgotPasssword = rest.post(
+	`${api.baseURL}/authentication/password/forgot`,
+	(req, res, ctx) => {
+		return res(
+			ctx.delay(RESPONSE_DELAY),
+			ctx.json({})
+			// ctx.status(401),
+			// ctx.json({ message: 'Invalid email or password' })
+		);
+	}
+);
 
-const resetPasssword = rest.post(`${api.baseURL}/authentication/password/reset`, (req, res, ctx) => {
-	return res(
-		ctx.delay(RESPONSE_DELAY),
-		ctx.json({})
-		// ctx.status(401),
-		// ctx.json({ message: 'Invalid email or password' })
-	);
-});
+const resetPasssword = rest.post(
+	`${api.baseURL}/authentication/password/reset`,
+	(req, res, ctx) => {
+		return res(
+			ctx.delay(RESPONSE_DELAY),
+			ctx.json({})
+			// ctx.status(401),
+			// ctx.json({ message: 'Invalid email or password' })
+		);
+	}
+);
 
 export default [login, forgotPasssword, resetPasssword];

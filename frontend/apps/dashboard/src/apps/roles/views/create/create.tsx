@@ -1,6 +1,6 @@
 // Libs
 import { Suspense } from 'react';
-import { RouteComponentProps } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 // Components
 import { Card, PageHeader } from 'antd';
@@ -11,61 +11,50 @@ import Spinner from '../../../../components/spinner';
 import CreateUserForm from '../../forms/create';
 
 // Hooks
-import useAuth from '../../../../hooks/use-auth';
+import useAuth from '../../../authentication/hooks/use-auth';
 
 // Services
 import { Role } from '@app/services/roles';
-import { refreshToken } from '../../../../services/authentication.service';
 
-interface Params {
-    id?: string;
+interface CreateProps {
+	isEditMode?: boolean;
 }
 
-interface CreateProps extends RouteComponentProps<Params> {
-    isEditMode?: boolean;
-}
+const RolesCreateView: React.FunctionComponent<CreateProps> = ({ isEditMode }) => {
+	const navigate = useNavigate();
+	const { authState, updateAuthState, refreshToken } = useAuth();
+	const params = useParams();
+	const id = params.id ? parseInt(params.id) : null;
 
-const RolesCreateView: React.FunctionComponent<CreateProps> = ({
-    isEditMode,
-    history,
-    match,
-}) => {
-    const { authState, updateAuthState } = useAuth();
-    const id = match.params.id ? +match.params.id : null;
+	function onSubmit(promise: Promise<Role>) {
+		promise.then(async result => {
+			if (result.id === authState.user?.roleId) {
+				await refreshToken();
+				updateAuthState();
+			}
 
-    function onSubmit(promise: Promise<Role>) {
-        promise.then(async (result) => {
-            if (result.id === authState.user?.roleId) {
-                await refreshToken();
-                await updateAuthState();
-            }
+			navigate(-1);
+		});
+	}
 
-            history.goBack();
-        });
-    }
-
-    return (
-        <div>
-            <PageHeader
-                ghost={false}
-                title="Roles"
-                subTitle={!isEditMode ? 'Create new role' : 'Edit role'}
-                style={{ marginBottom: '24px' }}
-                onBack={() => history.goBack()}
-            />
-            <Card>
-                <ErrorBoundary>
-                    <Suspense fallback={<Spinner />}>
-                        <CreateUserForm
-                            id={id}
-                            isEditMode={!!isEditMode}
-                            onSubmit={onSubmit}
-                        />
-                    </Suspense>
-                </ErrorBoundary>
-            </Card>
-        </div>
-    );
+	return (
+		<div>
+			<PageHeader
+				ghost={false}
+				title='Roles'
+				subTitle={!isEditMode ? 'Create new role' : 'Edit role'}
+				style={{ marginBottom: '24px' }}
+				onBack={() => navigate(-1)}
+			/>
+			<Card>
+				<ErrorBoundary>
+					<Suspense fallback={<Spinner />}>
+						<CreateUserForm id={id} isEditMode={!!isEditMode} onSubmit={onSubmit} />
+					</Suspense>
+				</ErrorBoundary>
+			</Card>
+		</div>
+	);
 };
 
 export default RolesCreateView;

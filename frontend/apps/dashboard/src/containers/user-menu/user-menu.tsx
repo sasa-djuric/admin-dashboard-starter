@@ -5,18 +5,18 @@ import { Menu } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 
 // Hooks
-import useAuth from '../../hooks/use-auth';
+import useAuth from '../../apps/authentication/hooks/use-auth';
 
 const UserMenu = () => {
-    const { logout } = useAuth();
+	const { logout } = useAuth();
 
-    return (
-        <Menu>
-            <Menu.Item icon={<LogoutOutlined />} onClick={logout}>
-                Logout
-            </Menu.Item>
-        </Menu>
-    );
+	return (
+		<Menu>
+			<Menu.Item icon={<LogoutOutlined />} onClick={logout}>
+				Logout
+			</Menu.Item>
+		</Menu>
+	);
 };
 
 export default UserMenu;

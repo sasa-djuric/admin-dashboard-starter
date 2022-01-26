@@ -1,22 +1,24 @@
 import { notification } from 'antd';
-import { RouteComponentProps } from 'react-router';
+import { useNavigate } from 'react-router';
 import ForgotPasswordForm from '../../forms/forgot-password/forgot-password';
-import AuthenticationPage from '../../templates/page';
+import Layout from '../../layout';
 
-interface ForgotPasswordViewProps extends RouteComponentProps {}
+interface ForgotPasswordViewProps {}
 
-const ForgotPasswordView: React.FunctionComponent<ForgotPasswordViewProps> = ({ history }) => {
+const ForgotPasswordView: React.FunctionComponent<ForgotPasswordViewProps> = () => {
+	const navigate = useNavigate();
+
 	function onSuccess() {
 		notification.info({
 			message: 'Check your e-mail for reset link'
 		});
-		history.push('/login');
+		navigate('/login');
 	}
 
 	return (
-		<AuthenticationPage>
+		<Layout>
 			<ForgotPasswordForm onSuccess={onSuccess} />
-		</AuthenticationPage>
+		</Layout>
 	);
 };
 

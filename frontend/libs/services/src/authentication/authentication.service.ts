@@ -1,5 +1,3 @@
-import { createService } from 'react-query-service';
-import { decode } from 'jsonwebtoken';
 import { AuthenticatedUser } from '../users';
 import { getQueryClient } from '..';
 import http from '../http';
@@ -22,26 +20,6 @@ function login(data: LoginRequest) {
 
 		return result;
 	});
-}
-
-async function loginWithToken(token: string | null) {
-	if (!token) {
-		return Promise.reject();
-	}
-
-	const decoded = decode(token, { complete: true }) as Record<any, any>;
-
-	if (decoded) {
-		http.setToken(token);
-		return Promise.resolve(decoded.payload.user);
-	}
-
-	return Promise.reject();
-}
-
-async function logout() {
-	http.removeToken();
-	getQueryClient().getQueryCache().clear();
 }
 
 export interface ForgotPasswordRequest {
@@ -74,17 +52,10 @@ function refreshAccessToken() {
 	return http.get<string>('/token/refresh');
 }
 
-const authenticationService = createService({
-	name: 'authentication',
-	mutations: {
-		login,
-		loginWithToken,
-		logout,
-		forgotPassword,
-		resetPassword,
-		activation,
-		refreshAccessToken
-	}
-});
-
-export default authenticationService;
+export default {
+	login,
+	forgotPassword,
+	resetPassword,
+	activation,
+	refreshAccessToken
+} as const;

@@ -1,6 +1,6 @@
 // Libs
 import { Suspense } from 'react';
-import { RouteComponentProps } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 
 // Components
 import { Card, PageHeader } from 'antd';
@@ -11,61 +11,50 @@ import Spinner from '../../../../components/spinner';
 import CreateUserForm from '../../forms/create';
 
 // Hooks
-import useAuth from '../../../../hooks/use-auth';
+import useAuth from '../../../authentication/hooks/use-auth';
 
 // Services
 import { User } from '@app/services/users';
-import { refreshToken } from '../../../../services/authentication.service';
 
-interface Params {
-    id?: string;
+interface CreateProps {
+	isEditMode?: boolean;
 }
 
-interface CreateProps extends RouteComponentProps<Params> {
-    isEditMode?: boolean;
-}
+const UsersCreateView: React.FunctionComponent<CreateProps> = ({ isEditMode }) => {
+	const { authState, updateAuthState, refreshToken } = useAuth();
+	const navigate = useNavigate();
+	const params = useParams();
+	const id = params.id ? +params.id : null;
 
-const UsersCreateView: React.FunctionComponent<CreateProps> = ({
-    isEditMode,
-    history,
-    match,
-}) => {
-    const { authState, updateAuthState } = useAuth();
-    const id = match.params.id ? +match.params.id : null;
+	function onSubmit(promise: Promise<User>) {
+		promise.then(async result => {
+			if (result.id === authState.user?.id) {
+				await refreshToken();
+				updateAuthState();
+			}
 
-    function onSubmit(promise: Promise<User>) {
-        promise.then(async (result) => {
-            if (result.id === authState.user?.id) {
-                await refreshToken();
-                await updateAuthState();
-            }
+			navigate(-1);
+		});
+	}
 
-            history.goBack();
-        });
-    }
-
-    return (
-        <div>
-            <PageHeader
-                ghost={false}
-                title="Users"
-                subTitle={!isEditMode ? 'Create new user' : 'Edit user'}
-                style={{ marginBottom: '24px' }}
-                onBack={() => history.goBack()}
-            />
-            <Card>
-                <ErrorBoundary>
-                    <Suspense fallback={<Spinner />}>
-                        <CreateUserForm
-                            id={id}
-                            isEditMode={!!isEditMode}
-                            onSubmit={onSubmit}
-                        />
-                    </Suspense>
-                </ErrorBoundary>
-            </Card>
-        </div>
-    );
+	return (
+		<div>
+			<PageHeader
+				ghost={false}
+				title='Users'
+				subTitle={!isEditMode ? 'Create new user' : 'Edit user'}
+				style={{ marginBottom: '24px' }}
+				onBack={() => navigate(-1)}
+			/>
+			<Card>
+				<ErrorBoundary>
+					<Suspense fallback={<Spinner />}>
+						<CreateUserForm id={id} isEditMode={!!isEditMode} onSubmit={onSubmit} />
+					</Suspense>
+				</ErrorBoundary>
+			</Card>
+		</div>
+	);
 };
 
 export default UsersCreateView;

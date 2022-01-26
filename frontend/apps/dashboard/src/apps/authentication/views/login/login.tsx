@@ -1,32 +1,33 @@
 // Libs
-import { RouteComponentProps } from 'react-router';
+import { useNavigate } from 'react-router';
 
 // Containers
 import LoginForm from '../../forms/login';
-import AuthenticationPage from '../../templates/page';
+import Layout from '../../layout';
 
 // Services
 import { LoginResponse } from '@app/services/authentication';
 
 // Hooks
-import useAuth from '../../../../hooks/use-auth';
+import useAuth from '../../hooks/use-auth';
 
-interface LoginProps extends RouteComponentProps {}
+interface LoginProps {}
 
-const LoginView: React.FunctionComponent<LoginProps> = ({ history }) => {
-    const { updateAuthState } = useAuth();
+const LoginView: React.FunctionComponent<LoginProps> = () => {
+	const navigate = useNavigate();
+	const { updateAuthState } = useAuth();
 
-    function onSuccess(data: LoginResponse) {
-        localStorage.setItem('token', data.token);
-        updateAuthState();
-        history.replace('/');
-    }
+	function onSuccess(data: LoginResponse) {
+		localStorage.setItem('token', data.token);
+		updateAuthState();
+		navigate('/');
+	}
 
-    return (
-        <AuthenticationPage>
-            <LoginForm onSuccess={onSuccess} />
-        </AuthenticationPage>
-    );
+	return (
+		<Layout>
+			<LoginForm onSuccess={onSuccess} />
+		</Layout>
+	);
 };
 
 export default LoginView;

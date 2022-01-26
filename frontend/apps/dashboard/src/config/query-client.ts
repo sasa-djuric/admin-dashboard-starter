@@ -3,7 +3,7 @@ import { createClient } from 'react-query-service';
 const queryClient = createClient({
 	defaultOptions: {
 		queries: {
-			staleTime: Number.MAX_SAFE_INTEGER
+			staleTime: Number.POSITIVE_INFINITY
 		}
 	}
 });
