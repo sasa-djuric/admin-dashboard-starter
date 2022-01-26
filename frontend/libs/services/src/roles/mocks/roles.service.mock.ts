@@ -7,7 +7,7 @@ import { WithFilters } from '../../types';
 import { Role } from '../interfaces';
 import { setRolesDB, rolesDB } from './roles.db.mock';
 
-const getAll = rest.get<WithFilters<any>>(`${api.baseURL}/roles/`, (req, res, ctx) => {
+const getAll = rest.get<WithFilters<any>>(`${api.baseURL}/roles`, (req, res, ctx) => {
 	return res(ctx.delay(RESPONSE_DELAY), ctx.json(handleFilters(rolesDB, req)));
 });
 
@@ -21,7 +21,7 @@ const getById = rest.get<WithFilters<any>>(`${api.baseURL}/roles/:id`, (req, res
 	return res(ctx.delay(RESPONSE_DELAY), ctx.json(found));
 });
 
-const create = rest.post<Omit<Role, 'id'>>(`${api.baseURL}/roles/`, (req, res, ctx) => {
+const create = rest.post<Omit<Role, 'id'>>(`${api.baseURL}/roles`, (req, res, ctx) => {
 	const created = { id: rolesDB.length, ...req.body };
 
 	rolesDB.push(created);

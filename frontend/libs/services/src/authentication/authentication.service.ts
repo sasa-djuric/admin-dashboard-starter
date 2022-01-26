@@ -1,5 +1,4 @@
 import { AuthenticatedUser } from '../users';
-import { getQueryClient } from '..';
 import http from '../http';
 
 export interface LoginRequest {

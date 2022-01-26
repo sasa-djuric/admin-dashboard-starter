@@ -7,7 +7,7 @@ import { WithFilters } from '../../types';
 import { User } from '../interfaces';
 import { setUsersDB, usersDB } from './users.db.mock';
 
-const getAll = rest.get<WithFilters<any>>(`${api.baseURL}/users/`, (req, res, ctx) => {
+const getAll = rest.get<WithFilters<any>>(`${api.baseURL}/users`, (req, res, ctx) => {
 	return res(ctx.delay(RESPONSE_DELAY), ctx.json(handleFilters(usersDB, req)));
 });
 
@@ -21,7 +21,7 @@ const getById = rest.get<WithFilters<any>>(`${api.baseURL}/users/:id`, (req, res
 	return res(ctx.delay(RESPONSE_DELAY), ctx.json(found));
 });
 
-const create = rest.post<Omit<User, 'id'>>(`${api.baseURL}/users/`, (req, res, ctx) => {
+const create = rest.post<Omit<User, 'id'>>(`${api.baseURL}/users`, (req, res, ctx) => {
 	const created = { id: usersDB.length, ...req.body };
 
 	usersDB.push(created);
