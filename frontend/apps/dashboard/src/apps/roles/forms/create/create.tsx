@@ -1,7 +1,6 @@
 // Libs
 import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
-import { useQuery } from 'react-query-service';
 
 // Components
 import { Button, Card, Checkbox, Col, Divider, Form, Input, notification, Row, Switch } from 'antd';
@@ -11,7 +10,7 @@ import validationSchema from './validation.schema';
 
 // Services
 import { ID, Permissions } from '@app/services';
-import rolesService, { Role } from '@app/services/roles';
+import { Role, useCreateRole, useRoleById, useUpdateRole } from '@app/services/roles';
 
 // Utils
 import { isNil } from 'ramda';
@@ -35,55 +34,50 @@ const permissions = [
 	{ label: 'Delete', value: 'delete' }
 ];
 
-type CreateUserFormI = Role;
+type CreateRoleFormI = Role;
 
 const CreateRoleForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, onSubmit }) => {
-	const { data: user } = useQuery(rolesService.queries.getById(id), {
+	const { role } = useRoleById(id, {
 		enabled: !isNil(id),
 		suspense: true
 	});
+	const { createRole } = useCreateRole();
+	const { updateRole } = useUpdateRole();
 	const [globalPermissions, setGlobalPermissions] = useState<Array<string>>([]);
-	const {
-		handleChange,
-		setFieldValue,
-		handleSubmit,
-		values,
-		errors,
-		dirty,
-		isSubmitting
-	} = useFormik<CreateUserFormI | Omit<CreateUserFormI, 'id'>>({
-		initialValues: user || {
-			name: '',
-			isActive: true,
-			permissions: []
-		},
-		validationSchema,
-		validateOnChange: false,
-		onSubmit: values => {
-			const requestMethodName = !isEditMode ? 'create' : 'update';
-			const requestMethod = rolesService[requestMethodName];
-			let promise: Promise<Role>;
 
-			promise = requestMethod(values).then(
-				result => {
-					return result;
-				},
-				err => {
-					notification.error({
-						message: err.message
-					});
+	const { handleChange, setFieldValue, handleSubmit, values, errors, dirty, isSubmitting } =
+		useFormik<CreateRoleFormI | Omit<CreateRoleFormI, 'id'>>({
+			initialValues: role || {
+				name: '',
+				isActive: true,
+				permissions: []
+			},
+			validationSchema,
+			validateOnChange: false,
+			onSubmit: values => {
+				const requestMethod = !isEditMode ? createRole : updateRole;
+				let promise: Promise<Role>;
 
-					throw err;
+				promise = requestMethod(values).then(
+					result => {
+						return result;
+					},
+					err => {
+						notification.error({
+							message: err.message
+						});
+
+						throw err;
+					}
+				);
+
+				if (onSubmit) {
+					onSubmit(promise);
 				}
-			);
 
-			if (onSubmit) {
-				onSubmit(promise);
+				return promise;
 			}
-
-			return promise;
-		}
-	});
+		});
 
 	function onGlobalPermissionChange(permission: string) {
 		const globalPermissions = entities.map(entity => `${entity.value}:${permission}`);
@@ -166,10 +160,10 @@ const CreateRoleForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, 
 	}
 
 	useEffect(() => {
-		if (user) {
-			updateGlobalPermissions(user.permissions);
+		if (role) {
+			updateGlobalPermissions(role.permissions);
 		}
-	}, [user]);
+	}, [role]);
 
 	return (
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>

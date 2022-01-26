@@ -1,6 +1,5 @@
 // Libs
 import { FunctionComponent, useState } from 'react';
-import { useQuery } from 'react-query-service';
 import { useNavigate, useParams } from 'react-router-dom';
 
 // Components
@@ -16,7 +15,7 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/lib/table';
 
 // Services
-import rolesService, { Role } from '@app/services/roles';
+import { Role, useRemoveRole, useRoles } from '@app/services/roles';
 import usersService from '@app/services/users';
 
 // Interfaces
@@ -97,7 +96,8 @@ const RolesMainView: FunctionComponent<RolesMainViewProps> = () => {
 	const isMaster = typeof id !== 'number';
 	const [search, setSearch] = useState('');
 	const { authState, refreshToken } = useAuth();
-	const { data: roles, isLoading } = useQuery(rolesService.queries.getAll());
+	const { roles, isLoading } = useRoles();
+	const { removeRole } = useRemoveRole();
 
 	function onNew() {
 		navigate(`/${settings.name}${!isMaster ? `/${id}` : ''}/new`);
@@ -129,7 +129,7 @@ const RolesMainView: FunctionComponent<RolesMainViewProps> = () => {
 				return usersService
 					.swithRole({ id, roleId: replacement })
 					.then(() => {
-						return rolesService.remove(id);
+						return removeRole(id);
 					})
 					.then(() => {
 						if (id === authState.user?.roleId) {
@@ -144,7 +144,7 @@ const RolesMainView: FunctionComponent<RolesMainViewProps> = () => {
 		confirm.delete({
 			title: 'Do you want to delete this item?',
 			onOk() {
-				return rolesService.remove(row.id).catch(err => {
+				return removeRole(row.id).catch(err => {
 					if (err.statusCode === 409) {
 						return onDeleteConflict(row.id);
 					}

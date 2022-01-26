@@ -1,10 +1,8 @@
-// Libs
-import { createService } from 'react-query-service';
-
 // Types
 import { ID, WithFilters } from '../types';
 import { ResponseWithPagination, Search, Sorting } from '../interfaces';
 import { Role } from './interfaces';
+import { RemoveResponse } from '../interfaces';
 
 // Utils
 import { omit } from 'ramda';
@@ -32,44 +30,14 @@ function update(data: Partial<Role>) {
 }
 
 function remove(id: ID) {
-	return http.delete<{ id: ID }>(`/roles/${id}`);
+	return http.delete<RemoveResponse>(`/roles/${id}`);
 }
 
-export const usersService = createService({
-	name: 'roles',
-	queries: {
-		getAll,
-		getAllPaginated,
-		getById
-	},
-	mutations: {
-		create: {
-			mutationFn: create,
-			onSuccess: (result: any) => {
-				usersService.queries.getById(result.id).setData(result);
-				usersService.queries.getAll().invalidate();
-				usersService.queries.getAllPaginated().invalidate();
-			}
-		},
-		update: {
-			mutationFn: update,
-			onSuccess: (result: any) => {
-				usersService.queries.getById(result.id).setData(result);
-				usersService.queries
-					.getAll()
-					.setData(data => data?.map(user => (user.id === result.id ? result : user)));
-				usersService.queries.getAllPaginated().invalidate();
-			}
-		},
-		remove: {
-			mutationFn: remove,
-			onSuccess: (result: any) => {
-				usersService.queries.getById(result?.id).invalidate();
-				usersService.queries.getAll().invalidate();
-				usersService.queries.getAllPaginated().invalidate();
-			}
-		}
-	}
-});
-
-export default usersService;
+export default {
+	getAll,
+	getAllPaginated,
+	getById,
+	create,
+	update,
+	remove
+} as const;
