@@ -16,7 +16,7 @@ import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ColumnsType } from 'antd/lib/table';
 
 // Services
-import usersService, { User } from '@app/services/users';
+import usersService, { User, useUsersPaginated } from '@app/services/users';
 
 // Interfaces
 import { Sorting } from '@app/services';
@@ -84,15 +84,13 @@ const UsersMainView: FunctionComponent<UsersMainViewProps> = () => {
 	const [search, setSearch] = useState('');
 	const [page, setPage] = useState(1);
 	const [sort, setSort] = useState<Sorting>();
-	const { data: users, isLoading } = useQuery(
-		usersService.queries.getAllPaginated({
-			id,
-			search,
-			offset: (page - 1) * 5,
-			limit: paginationConfig.limit,
-			...sort
-		})
-	);
+	const { users, isLoading } = useUsersPaginated({
+		id,
+		search,
+		offset: (page - 1) * 5,
+		limit: paginationConfig.limit,
+		...sort
+	});
 
 	function onNew() {
 		navigate(`/${settings.name}${!isMaster ? `/${id}` : ''}/new`);

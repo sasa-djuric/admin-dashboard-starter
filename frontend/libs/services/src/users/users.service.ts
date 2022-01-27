@@ -1,6 +1,3 @@
-// Libs
-import { createService } from 'react-query-service';
-
 // Types
 import { ID, WithFilters } from '../types';
 import { ResponseWithPagination, Search, Sorting } from '../interfaces';
@@ -36,7 +33,7 @@ function remove(id: ID) {
 	return http.delete<{ id: ID }>(`/users/${id}`);
 }
 
-interface SwithRoleRequest {
+export interface SwithRoleRequest {
 	id: ID;
 	roleId: ID;
 }
@@ -45,48 +42,12 @@ function swithRole(data: SwithRoleRequest) {
 	return http.post('/users/role/switch', data);
 }
 
-export const usersService = createService({
-	name: 'users',
-	queries: {
-		getAll,
-		getAllPaginated,
-		getById
-	},
-	mutations: {
-		create: {
-			mutationFn: create,
-			onSuccess: (result: any) => {
-				usersService.queries.getById(result.id).setData(result);
-				usersService.queries.getAll().invalidate();
-				usersService.queries.getAllPaginated().invalidate();
-			}
-		},
-		update: {
-			mutationFn: update,
-			onSuccess: (result: any) => {
-				usersService.queries.getById(result.id).setData(result);
-				usersService.queries
-					.getAll()
-					.setData(data => data?.map(user => (user.id === result.id ? result : user)));
-				usersService.queries.getAllPaginated().invalidate();
-			}
-		},
-		remove: {
-			mutationFn: remove,
-			onSuccess: (result: any) => {
-				usersService.queries.getById(result?.id).invalidate();
-				usersService.queries.getAll().invalidate();
-				usersService.queries.getAllPaginated().invalidate();
-			}
-		},
-		swithRole: {
-			mutationFn: swithRole,
-			onSuccess: () => {
-				usersService.queries.getAll().invalidate();
-				usersService.queries.getAllPaginated().invalidate();
-			}
-		}
-	}
-});
-
-export default usersService;
+export default {
+	getAll,
+	getAllPaginated,
+	getById,
+	create,
+	update,
+	remove,
+	swithRole
+};

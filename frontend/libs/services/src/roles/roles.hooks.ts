@@ -3,7 +3,8 @@ import {
 	UseMutationOptions,
 	useQuery,
 	useQueryClient,
-	UseQueryOptions
+	UseQueryOptions,
+	UseQueryResult
 } from 'react-query';
 import { Role } from '.';
 import { ID, RemoveResponse, ResponseWithPagination, Search, Sorting, WithFilters } from '..';
@@ -20,14 +21,23 @@ enum Query {
 	RemoveRole = 'remove-role'
 }
 
+type UseRolesFilters = Partial<Sorting & Search>;
+type UseRolesOptions = Omit<
+	UseQueryOptions<Role[], unknown, Role[], string[]>,
+	'queryKey' | 'queryFn'
+>;
+type UseRolesResult = UseQueryResult<Role[], unknown> & { roles: Role[] };
+
+export function useRoles(options?: UseRolesOptions): UseRolesResult;
+export function useRoles(filters: UseRolesFilters, options: UseRolesOptions): UseRolesResult;
 export function useRoles(
-	filters?: Partial<Sorting & Search>
-	// options: Omit<UseQueryOptions<Role[], unknown, Role[], string[]>, 'queryKey' | 'queryFn'>
-) {
+	filters: UseRolesOptions | UseRolesFilters,
+	options?: UseRolesOptions
+): UseRolesResult {
 	const query = useQuery(
 		[CACHE_NAMESPACE, Query.Roles, filters],
-		() => rolesService.getAll(filters)
-		// options
+		() => rolesService.getAll(options ? (filters as UseRolesFilters) : undefined),
+		(options ? options : filters) as UseRolesOptions
 	);
 
 	return { roles: query.data, ...query };
@@ -70,16 +80,17 @@ export function useRoleById(
 export function useCreateRole(
 	options?: Omit<
 		UseMutationOptions<Role, unknown, Omit<Role, 'id'>, unknown>,
-		'mutationFn' | 'mutationKey' | 'onSuccess'
+		'mutationFn' | 'mutationKey'
 	>
 ) {
 	const queryClient = useQueryClient();
 	const query = useMutation([CACHE_NAMESPACE, Query.CreateRole], rolesService.create, {
 		...options,
-		onSuccess: result => {
+		onSuccess: (result, variables, context) => {
 			queryClient.invalidateQueries([CACHE_NAMESPACE, Query.Roles]);
 			queryClient.invalidateQueries([CACHE_NAMESPACE, Query.RolesPaginated]);
 			queryClient.setQueryData([CACHE_NAMESPACE, Query.Role, result.id], result);
+			return options?.onSuccess?.(result, variables, context);
 		}
 	});
 
@@ -89,18 +100,19 @@ export function useCreateRole(
 export function useUpdateRole(
 	options?: Omit<
 		UseMutationOptions<Role, unknown, Partial<Role>, unknown>,
-		'mutationFn' | 'mutationKey' | 'onSuccess'
+		'mutationFn' | 'mutationKey'
 	>
 ) {
 	const queryClient = useQueryClient();
 	const query = useMutation([CACHE_NAMESPACE, Query.UpdateRole], rolesService.update, {
 		...options,
-		onSuccess: result => {
+		onSuccess: (result, variables, context) => {
 			queryClient.invalidateQueries([CACHE_NAMESPACE, Query.RolesPaginated]);
 			queryClient.setQueryData<Role[]>([CACHE_NAMESPACE, Query.Roles], data =>
 				data?.map(user => (user.id === result.id ? result : user))
 			);
 			queryClient.setQueryData([CACHE_NAMESPACE, Query.Role, result.id], result);
+			return options?.onSuccess?.(result, variables, context);
 		}
 	});
 
@@ -116,10 +128,11 @@ export function useRemoveRole(
 	const queryClient = useQueryClient();
 	const query = useMutation([CACHE_NAMESPACE, Query.RemoveRole], rolesService.remove, {
 		...options,
-		onSuccess: result => {
+		onSuccess: (result, variables, context) => {
 			queryClient.invalidateQueries([CACHE_NAMESPACE, Query.Roles]);
 			queryClient.invalidateQueries([CACHE_NAMESPACE, Query.RolesPaginated]);
 			queryClient.invalidateQueries([CACHE_NAMESPACE, Query.Role, result.id]);
+			return options?.onSuccess?.(result, variables, context);
 		}
 	});
 

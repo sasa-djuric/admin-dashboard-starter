@@ -1,6 +1,5 @@
 // Libs
 import { useFormik } from 'formik';
-import { useQuery } from 'react-query-service';
 
 // Components
 import { Button, Col, Divider, Form, Input, notification, Row, Select, Switch } from 'antd';
@@ -11,8 +10,8 @@ import validationSchema from './validation.schema';
 
 // Services
 import { ID } from '@app/services';
-import usersService, { User } from '@app/services/users';
-import rolesService from '@app/services/roles';
+import { useCreateUser, User, useUpdateUser, useUserById } from '@app/services/users';
+import { useRoles } from '@app/services/roles';
 
 // Utils
 import { isNil } from 'ramda';
@@ -26,56 +25,51 @@ interface CreateProps {
 interface CreateUserFormI extends Omit<User, 'permissions'> {}
 
 const CreateUserForm: React.FunctionComponent<CreateProps> = ({ id, isEditMode, onSubmit }) => {
-	const { data: user } = useQuery(usersService.queries.getById(id), {
+	const { user } = useUserById(id, {
 		enabled: !isNil(id),
 		suspense: true
 	});
-	const { data: roles } = useQuery(rolesService.queries.getAll(), {
+	const { roles } = useRoles({
 		suspense: true
 	});
-	const {
-		handleChange,
-		setFieldValue,
-		handleSubmit,
-		values,
-		errors,
-		dirty,
-		isSubmitting
-	} = useFormik<CreateUserFormI | Omit<CreateUserFormI, 'id'>>({
-		initialValues: user || {
-			name: '',
-			email: '',
-			isActive: true,
-			roleId: '',
-			profileImage: null
-		},
-		validationSchema,
-		validateOnChange: false,
-		onSubmit: values => {
-			const requestMethodName = !isEditMode ? 'create' : 'update';
-			const requestMethod = usersService[requestMethodName];
-			let promise: Promise<User>;
+	const { createUser } = useCreateUser();
+	const { updateUser } = useUpdateUser();
 
-			promise = requestMethod(values).then(
-				result => {
-					return result;
-				},
-				err => {
-					notification.error({
-						message: err.message
-					});
+	const { handleChange, setFieldValue, handleSubmit, values, errors, dirty, isSubmitting } =
+		useFormik<CreateUserFormI | Omit<CreateUserFormI, 'id'>>({
+			initialValues: user || {
+				name: '',
+				email: '',
+				isActive: true,
+				roleId: '',
+				profileImage: null
+			},
+			validationSchema,
+			validateOnChange: false,
+			onSubmit: values => {
+				const requestMethod = !isEditMode ? createUser : updateUser;
+				let promise: Promise<User>;
 
-					throw err;
+				promise = requestMethod(values).then(
+					result => {
+						return result;
+					},
+					err => {
+						notification.error({
+							message: err.message
+						});
+
+						throw err;
+					}
+				);
+
+				if (onSubmit) {
+					onSubmit(promise);
 				}
-			);
 
-			if (onSubmit) {
-				onSubmit(promise);
+				return promise;
 			}
-
-			return promise;
-		}
-	});
+		});
 
 	return (
 		<Form layout='vertical' onSubmitCapture={handleSubmit}>
