@@ -83,7 +83,7 @@ const Layout: FunctionComponent = ({ children }) => {
 
 											return (
 												<Menu.Item
-													key={`main-menu-${(subIndex + 1) * index}`}
+													key={`main-menu-sub-${(subIndex + 1) * index}`}
 													icon={icon}
 													title={title}
 												>

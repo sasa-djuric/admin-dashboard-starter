@@ -12,7 +12,7 @@ const UserMenu = () => {
 
 	return (
 		<Menu>
-			<Menu.Item icon={<LogoutOutlined />} onClick={logout}>
+			<Menu.Item key='logout' icon={<LogoutOutlined />} onClick={logout}>
 				Logout
 			</Menu.Item>
 		</Menu>

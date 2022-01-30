@@ -28,9 +28,6 @@ import { RolesPermissions } from '@app/services/roles/enums';
 // Utils
 import { debounce } from '../../../../utils';
 
-// Config
-import settings from '../../';
-
 // Hooks
 import useAuth from '../../../authentication/hooks/use-auth';
 
@@ -100,11 +97,11 @@ const RolesMainView: FunctionComponent<RolesMainViewProps> = () => {
 	const { removeRole } = useRemoveRole();
 
 	function onNew() {
-		navigate(`/${settings.name}${!isMaster ? `/${id}` : ''}/new`);
+		navigate(`/roles${!isMaster ? `/${id}` : ''}/new`);
 	}
 
 	function onEdit(row: TableRow, index: number) {
-		navigate(`/${settings.name}/${row.id}/edit`);
+		navigate(`/roles/${row.id}/edit`);
 	}
 
 	function onDeleteConflict(id: ID) {

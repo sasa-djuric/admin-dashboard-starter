@@ -1,6 +1,5 @@
 // Libs
 import { FunctionComponent, useState } from 'react';
-import { useQuery } from 'react-query-service';
 import { useNavigate, useParams } from 'react-router-dom';
 
 // Components
@@ -29,7 +28,6 @@ import { UsersPermissions } from '@app/services/users/enums';
 import { handleTableChangeSort, debounce } from '../../../../utils';
 
 // Config
-import settings from '../../';
 import { paginationConfig } from '../../../../config/pagination';
 
 const columns = ({ onEdit, onDelete }: any): ColumnsType<TableRow> => [
@@ -93,11 +91,11 @@ const UsersMainView: FunctionComponent<UsersMainViewProps> = () => {
 	});
 
 	function onNew() {
-		navigate(`/${settings.name}${!isMaster ? `/${id}` : ''}/new`);
+		navigate(`/users${!isMaster ? `/${id}` : ''}/new`);
 	}
 
 	function onEdit(row: TableRow, index: number) {
-		navigate(`/${settings.name}/${row.id}/edit`);
+		navigate(`/users/${row.id}/edit`);
 	}
 
 	function onDelete(row: TableRow, index: number) {

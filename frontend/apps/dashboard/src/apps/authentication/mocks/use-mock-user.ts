@@ -6,7 +6,7 @@ import { AuthContext } from '../context';
 
 const mockUser: AuthenticatedUser = {
 	id: 1,
-	name: 'Test',
+	name: 'Test User',
 	email: 'test@user.com',
 	isActive: true,
 	permissions: [
