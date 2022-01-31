@@ -6,7 +6,6 @@
 -   NodeJs - https://nodejs.org
 -   NestJs - https://nestjs.com
 -   ReactJs - https://reactjs.org
--   NX - https://nx.dev
 -   MySql - https://mysql.com
 -   Redis - https://redis.io
 -   NginX - https://nginx.com
