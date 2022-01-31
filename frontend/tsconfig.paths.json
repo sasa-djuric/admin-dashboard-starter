@@ -5,7 +5,9 @@
 			"@components/*": ["./components/*"],
 			"@services/*": ["./services/*"],
 			"@services": ["./services"],
-			"@config/*": ["./config/*"]
+			"@config/*": ["./config/*"],
+			"@apps/*": ["./apps/*"],
+			"@apps": ["./apps"]
 		}
 	}
 }

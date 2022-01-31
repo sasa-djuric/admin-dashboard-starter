@@ -1,5 +1,5 @@
 import { Permissions } from '@services';
-import usePermissions from '../../apps/authentication/hooks/use-permissions';
+import usePermissions from '@apps/authentication/hooks/use-permissions';
 
 interface ProtectedProps {
 	permissions: Array<Permissions>;

@@ -1,6 +1,6 @@
 import Axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { ErrorCode } from './errors/enums';
-import { appConfig } from '../config/app';
+import { appConfig } from '@config/app';
 
 type Response<T> = T;
 

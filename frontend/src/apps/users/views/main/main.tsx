@@ -28,7 +28,7 @@ import { UsersPermissions } from '../../service//enums';
 import { handleTableChangeSort, debounce } from '../../../../utils';
 
 // Config
-import { paginationConfig } from '../../../../config/pagination';
+import { paginationConfig } from '@config/pagination';
 
 const columns = ({ onEdit, onDelete }: any): ColumnsType<TableRow> => [
 	{

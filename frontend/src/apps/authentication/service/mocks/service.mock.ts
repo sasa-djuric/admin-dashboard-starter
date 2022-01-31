@@ -2,14 +2,14 @@
 import { rest } from 'msw';
 
 // Config
-import { appConfig } from '../../../../config/app';
+import { appConfig } from '@config/app';
 
 // Constants
 import { RESPONSE_DELAY } from '@services/mocks/constants';
-import { usersDB } from '../../../users/service/mocks/users.db.mock';
+import { usersDB } from '@apps/users/service/mocks/users.db.mock';
 import { LoginRequest } from '../service';
 import { UnauthorizedException } from '@services/mocks/errors';
-import { rolesDB } from '../../../roles/service/mocks/roles.db.mock';
+import { rolesDB } from '@apps/roles/service/mocks/roles.db.mock';
 
 const login = rest.post<LoginRequest>(
 	`${appConfig.apiBaseURL}/authentication/login`,

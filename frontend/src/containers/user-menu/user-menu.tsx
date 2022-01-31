@@ -5,7 +5,7 @@ import { Menu } from 'antd';
 import { LogoutOutlined } from '@ant-design/icons';
 
 // Hooks
-import useAuth from '../../apps/authentication/hooks/use-auth';
+import useAuth from '@apps/authentication/hooks/use-auth';
 
 const UserMenu = () => {
 	const { logout } = useAuth();

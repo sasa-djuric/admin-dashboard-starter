@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { appConfig } from '../../../../config/app';
+import { appConfig } from '@config/app';
 import { RESPONSE_DELAY } from '@services/mocks/constants';
 import { NotFoundException } from '@services/mocks/errors';
 import { handleFilters } from '@services/mocks/utils';

@@ -11,11 +11,11 @@ import { Avatar, Dropdown, Layout as AntLayout, Menu, Space, Typography } from '
 import UserMenu from '../containers/user-menu';
 
 // Config
-import navigation, { NavigationConfig } from '../config/navigation';
+import navigation, { NavigationConfig } from '@config/navigation';
 
 // Hooks
-import usePermissions from '../apps/authentication/hooks/use-permissions';
-import useAuth from '../apps/authentication/hooks/use-auth';
+import usePermissions from '@apps/authentication/hooks/use-permissions';
+import useAuth from '@apps/authentication/hooks/use-auth';
 
 const { Text } = Typography;
 const { Header, Content, Sider } = AntLayout;

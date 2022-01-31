@@ -1,7 +1,7 @@
 import { DashboardOutlined, BarsOutlined, TeamOutlined } from '@ant-design/icons';
-import { Permissions } from '../services';
-import { RolesPermissions } from '../apps/roles/service/enums';
-import { UsersPermissions } from '../apps/users/service/enums';
+import { Permissions } from '@services';
+import { RolesPermissions } from '@apps/roles/service/enums';
+import { UsersPermissions } from '@apps/users/service/enums';
 
 export interface NavigationItem {
 	title: string;

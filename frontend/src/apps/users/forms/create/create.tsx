@@ -11,7 +11,7 @@ import validationSchema from './validation.schema';
 // Services
 import { ID } from '@services';
 import { useCreateUser, User, useUpdateUser, useUserById } from '../../service';
-import { useRoles } from '../../../roles/service';
+import { useRoles } from '@apps/roles/service';
 
 // Utils
 import { isNil } from 'ramda';

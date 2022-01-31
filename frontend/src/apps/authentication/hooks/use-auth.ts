@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import jwtDecode from 'jwt-decode';
 import { http } from '@services';
-import { AuthenticatedUser } from '../../users/service';
+import { AuthenticatedUser } from '@apps/users/service';
 import authenticationService from '../service';
 import { AuthContext } from '../context';
-import queryClient from '../../../config/query-client';
+import queryClient from '@config/query-client';
 
 const useAuth = () => {
 	const context = useContext(AuthContext);

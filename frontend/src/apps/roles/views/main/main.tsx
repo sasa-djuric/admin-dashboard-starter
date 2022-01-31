@@ -16,7 +16,7 @@ import { ColumnsType } from 'antd/lib/table';
 
 // Services
 import { Role, useRemoveRole, useRoles, RolesPermissions } from '../../service';
-import usersService from '../../../users/service';
+import usersService from '@apps/users/service';
 
 // Interfaces
 import { ID } from '@services';
@@ -26,7 +26,7 @@ import { TableRow } from '../../interfaces';
 import { debounce } from '../../../../utils';
 
 // Hooks
-import useAuth from '../../../authentication/hooks/use-auth';
+import useAuth from '@apps/authentication/hooks/use-auth';
 
 const columns = ({ onEdit, onDelete }: any): ColumnsType<TableRow> => [
 	{

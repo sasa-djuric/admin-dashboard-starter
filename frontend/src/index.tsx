@@ -15,7 +15,7 @@ import App from './app';
 import queryClient from './config/query-client';
 import { isDev, mockAPI } from './config/dev';
 
-import Authentication from './apps/authentication';
+import Authentication from '@apps/authentication';
 
 import './index.scss';
 import 'antd/dist/antd.css';

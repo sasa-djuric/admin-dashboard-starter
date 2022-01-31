@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { AuthenticatedUser } from '../users/service';
+import { AuthenticatedUser } from '@apps/users/service';
 import useSlice, { createSlice, Actions } from 'react-use-slice';
 
 interface AuthState {
