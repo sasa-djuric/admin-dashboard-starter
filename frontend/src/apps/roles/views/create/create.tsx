@@ -11,7 +11,7 @@ import Spinner from '@components/spinner';
 import CreateUserForm from '../../forms/create';
 
 // Hooks
-import useAuth from '@apps/authentication/hooks/use-auth';
+import { useAuth } from '@apps/authentication';
 
 // Services
 import { Role } from '../../service';

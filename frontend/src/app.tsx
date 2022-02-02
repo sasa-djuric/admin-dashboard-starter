@@ -7,7 +7,7 @@ import Spinner from './components/spinner';
 import ErrorBoundary from './components/service-error-boundary';
 
 // Containers
-import Layout from './layout/layout';
+import Layout from './layout';
 
 import { routesConfig } from './routes';
 

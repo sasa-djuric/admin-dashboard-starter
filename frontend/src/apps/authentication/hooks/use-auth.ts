@@ -1,12 +1,12 @@
 import { useContext } from 'react';
 import jwtDecode from 'jwt-decode';
 import { http } from '@services';
-import { AuthenticatedUser } from '@apps/users/service';
+import { AuthenticatedUser } from '@apps/users';
 import authenticationService from '../service';
 import { AuthContext } from '../context';
 import queryClient from '@config/query-client';
 
-const useAuth = () => {
+export const useAuth = () => {
 	const context = useContext(AuthContext);
 
 	if (!context) {
@@ -68,5 +68,3 @@ const useAuth = () => {
 
 	return { authState: state, login, updateAuthState, refreshToken, logout };
 };
-
-export default useAuth;

@@ -1,7 +1,6 @@
 import { useContext, useEffect } from 'react';
-import { RolesPermissions } from '@apps/roles/service/enums';
-import { AuthenticatedUser } from '@apps/users/service';
-import { UsersPermissions } from '@apps/users/service/enums';
+import { RolesPermissions } from '@apps/roles';
+import { AuthenticatedUser, UsersPermissions } from '@apps/users';
 import { AuthContext } from '../context';
 
 const mockUser: AuthenticatedUser = {

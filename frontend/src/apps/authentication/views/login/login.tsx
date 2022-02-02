@@ -9,7 +9,7 @@ import Layout from '../../layout';
 import { LoginResponse } from '../../service';
 
 // Hooks
-import useAuth from '../../hooks/use-auth';
+import { useAuth } from '../../hooks';
 
 interface LoginProps {}
 

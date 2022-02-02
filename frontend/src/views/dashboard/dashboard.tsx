@@ -1,6 +1,7 @@
 // Components
 import { Card, Col, Divider, Row, Statistic } from 'antd';
 import { AreaChart, Area, ResponsiveContainer, BarChart, Bar, LineChart, Line } from 'recharts';
+import { View } from '../../layout/view';
 
 const data = [
 	{
@@ -79,7 +80,7 @@ const data = [
 
 const DashboardView = () => {
 	return (
-		<div className='dashboard'>
+		<View>
 			<Row gutter={[16, 16]}>
 				<Col xs={24} sm={12} md={8} lg={8} xl={6}>
 					<Card>
@@ -150,7 +151,7 @@ const DashboardView = () => {
 					</Card>
 				</Col>
 			</Row>
-		</div>
+		</View>
 	);
 };
 

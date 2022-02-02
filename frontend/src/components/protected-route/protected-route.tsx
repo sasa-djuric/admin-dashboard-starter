@@ -1,6 +1,6 @@
 import { Permissions } from '@services';
 import { Navigate } from 'react-router';
-import usePermissions from '@apps/authentication/hooks/use-permissions';
+import { usePermissions } from '@apps/authentication';
 
 interface ProtectedRouteProps {
 	permissions?: Array<Permissions>;

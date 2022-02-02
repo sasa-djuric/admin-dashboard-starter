@@ -1,37 +1,56 @@
 interface PickFileOptions {
-    multiple: boolean;
+	multiple: boolean;
+	accept?: string;
 }
 
-export const pickFile = (options?: PickFileOptions): Promise<File> => {
-    return new Promise((resolve, reject) => {
-        const el = document.createElement('input');
+type PickFileReturn<T extends PickFileOptions> = T['multiple'] extends true
+	? Array<File>
+	: T['multiple'] extends false
+	? File
+	: never;
 
-        el.type = 'file';
-        el.style.display = 'none';
+export const pickFile = <T extends PickFileOptions>(options?: T): Promise<PickFileReturn<T>> => {
+	return new Promise<PickFileReturn<T>>((resolve, reject) => {
+		const el = document.createElement('input');
 
-        el.addEventListener('change', (e) => {
-            // @ts-ignore
-            resolve(e?.target?.files[0]);
+		el.type = 'file';
+		el.style.display = 'none';
 
-            el.remove();
-        });
+		if (options?.multiple) {
+			el.setAttribute('multiple', '');
+		}
 
-        document.body.appendChild(el);
+		if (options?.accept) {
+			el.setAttribute('accept', options.accept);
+		}
 
-        el.click();
-    });
+		el.addEventListener('change', e => {
+			const target = e?.target as HTMLInputElement | null;
+
+			if (target?.files) {
+				const result = options?.multiple ? Array.from(target.files) : target.files[0];
+				resolve(result as PickFileReturn<T>);
+			}
+
+			el.remove();
+		});
+
+		document.body.appendChild(el);
+
+		el.click();
+	});
 };
 
 export const readFile = (file: any): Promise<string | null | undefined> => {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
 
-        reader.addEventListener('load', (e) => {
-            resolve(e?.target?.result as string | null | undefined);
-        });
+		reader.addEventListener('load', e => {
+			resolve(e?.target?.result as string | null | undefined);
+		});
 
-        reader.addEventListener('abort', reject);
-        reader.addEventListener('error', reject);
-        reader.readAsText(file);
-    });
+		reader.addEventListener('abort', reject);
+		reader.addEventListener('error', reject);
+		reader.readAsText(file);
+	});
 };

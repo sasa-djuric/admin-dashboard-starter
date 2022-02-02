@@ -1,7 +1,7 @@
 import { Permissions } from '@services';
-import useAuth from './use-auth';
+import { useAuth } from './use-auth';
 
-const usePermissions = () => {
+export const usePermissions = () => {
 	const { authState } = useAuth();
 
 	function havePermission(permissions?: Array<Permissions>) {
@@ -14,5 +14,3 @@ const usePermissions = () => {
 
 	return havePermission;
 };
-
-export default usePermissions;

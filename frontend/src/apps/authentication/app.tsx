@@ -2,7 +2,7 @@ import { Suspense, useEffect, useState } from 'react';
 import { useRoutes } from 'react-router';
 import { http } from '@services';
 import Spinner from '@components/spinner';
-import useAuth from './hooks/use-auth';
+import { useAuth } from './hooks';
 import { useMockUser } from './mocks/use-mock-user';
 import { routesConfig } from './routes';
 

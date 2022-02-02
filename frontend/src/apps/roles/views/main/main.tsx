@@ -26,7 +26,7 @@ import { TableRow } from '../../interfaces';
 import { debounce } from '../../../../utils';
 
 // Hooks
-import useAuth from '@apps/authentication/hooks/use-auth';
+import { useAuth } from '@apps/authentication';
 
 const columns = ({ onEdit, onDelete }: any): ColumnsType<TableRow> => [
 	{

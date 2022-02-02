@@ -1,4 +1,4 @@
-import { AuthenticatedUser } from '@apps/users/service';
+import { AuthenticatedUser } from '@apps/users';
 import http from '@services/http';
 
 export interface LoginRequest {

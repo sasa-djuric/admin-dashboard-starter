@@ -1,6 +1,6 @@
 {
 	"project": {
-		"path": "./apps/dashboard/src",
+		"path": "./src",
 		"typescript": true,
 		"fileNaming": {
 			"casing": "kebab",
@@ -72,7 +72,7 @@
 				"casing": "kebab",
 				"name": "{name}"
 			},
-			"path": "/layouts"
+			"path": "/layout"
 		}
 	},
 	"style": {

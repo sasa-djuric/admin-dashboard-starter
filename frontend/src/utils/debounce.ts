@@ -3,6 +3,7 @@ export const debounce = <T extends (...args: any[]) => any>(fn: T, time: number)
 
 	return (...args: any[]) => {
 		clearTimeout(timeout!);
+
 		timeout = setTimeout(() => {
 			timeout = null;
 			fn(...args);
