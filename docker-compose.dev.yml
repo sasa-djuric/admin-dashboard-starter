@@ -1,0 +1,47 @@
+version: '3.9'
+services:
+    frontend:
+        extends:
+            file: docker-compose.yml
+            service: frontend
+        build:
+            context: ./frontend
+            dockerfile: dockerfile.dev
+        ports:
+            - 3000:3000
+        volumes:
+            - /app/node_modules
+            - ./frontend:/app
+        environment:
+            REACT_APP_API_BASE_URL: http://127.0.0.1:4000
+            CHOKIDAR_USEPOLLING: true
+            SKIP_PREFLIGHT_CHECK: true
+
+    backend:
+        extends:
+            file: docker-compose.yml
+            service: backend
+        build:
+            context: ./backend
+            dockerfile: dockerfile.dev
+        ports:
+            - 4000:4000
+        volumes:
+            - /app/node_modules
+            - ./backend:/app
+        environment:
+            NODE_ENV: development
+
+    mysql_master:
+        extends:
+            file: docker-compose.yml
+            service: mysql_master
+
+    redis_master:
+        extends:
+            file: docker-compose.yml
+            service: redis_master
+
+volumes:
+    mysql_master-volume:
+    redis_master-volume:

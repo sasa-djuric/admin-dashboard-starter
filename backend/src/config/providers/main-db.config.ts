@@ -7,7 +7,7 @@ const config = (): ConnectionOptions => ({
 	port: 3306,
 	username: process.env.MYSQL_USERNAME || 'root',
 	password: process.env.MYSQL_PASSWORD || 'password',
-	database: process.env.MYSQL || 'main',
+	database: process.env.MYSQL_DATABASE || 'main',
 	entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
 	subscribers: [__dirname + '/../../**/*.entity.subscriber{.ts,.js}'],
 	migrations: ['dist/providers/db/migration/*{.ts,.js}'],

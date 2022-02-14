@@ -7,7 +7,9 @@ import * as cookieParser from 'cookie-parser';
 import { LoggingService } from './modules/logging/logging.service';
 
 async function bootstrap() {
+	const port = parseInt(process.env.PORT || '4000');
 	const app = await NestFactory.create(AppModule, { cors: false });
+
 	app.useGlobalPipes(new ValidationPipe({ whitelist: true, transform: true }));
 	app.setGlobalPrefix('/v1');
 	app.use(json({ limit: '20mb' }));
@@ -29,6 +31,7 @@ async function bootstrap() {
 
 	SwaggerModule.setup('api', app, document);
 
-	await app.listen(3000);
+	await app.listen(port);
 }
+
 bootstrap();

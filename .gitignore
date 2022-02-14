@@ -25,4 +25,4 @@
 TODO.md
 
 .env
-mysql.env
+.env.mysql
