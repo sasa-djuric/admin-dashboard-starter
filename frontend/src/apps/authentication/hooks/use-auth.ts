@@ -6,6 +6,12 @@ import authenticationService from '../service';
 import { AuthContext } from '../context';
 import queryClient from '@config/query-client';
 
+interface JWTPayload {
+	exp: number;
+	iat: number;
+	user: AuthenticatedUser;
+}
+
 export const useAuth = () => {
 	const context = useContext(AuthContext);
 
@@ -15,11 +21,11 @@ export const useAuth = () => {
 
 	const { state, actions } = context;
 
-	async function login(accessToken: string) {
+	async function login(token: string) {
 		try {
-			const user = jwtDecode<AuthenticatedUser>(accessToken);
-			http.setToken(accessToken);
-			localStorage.setItem('token', accessToken);
+			const { user } = jwtDecode<JWTPayload>(token);
+			http.setToken(token);
+			localStorage.setItem('token', token);
 			actions.login(user);
 		} catch {
 			logout();
@@ -28,16 +34,14 @@ export const useAuth = () => {
 
 	function updateAuthState() {
 		try {
-			actions.setIsAuthenticating(true);
-
 			const token = localStorage.getItem('token');
 
 			if (token) {
-				const user = jwtDecode<AuthenticatedUser>(token);
+				const { user } = jwtDecode<JWTPayload>(token);
 
 				if (user) {
-					actions.login(user);
 					http.setToken(token);
+					actions.login(user);
 				} else {
 					throw new Error();
 				}

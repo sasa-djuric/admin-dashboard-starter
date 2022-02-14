@@ -4,13 +4,11 @@ import useSlice, { createSlice, Actions } from 'react-use-slice';
 
 interface AuthState {
 	isAuth: boolean;
-	isLoading: boolean;
 	user: AuthenticatedUser | null;
 }
 
 const initialState: AuthState = {
 	isAuth: false,
-	isLoading: false,
 	user: null
 };
 
@@ -22,18 +20,11 @@ const slice = createSlice({
 			return {
 				...state,
 				isAuth: true,
-				isLoading: false,
 				user
 			};
 		},
 		logout() {
 			return initialState;
-		},
-		setIsAuthenticating(state, isAuthenticating) {
-			return {
-				...state,
-				isAuthenticating
-			};
 		}
 	}
 });

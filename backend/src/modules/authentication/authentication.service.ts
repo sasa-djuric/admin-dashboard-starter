@@ -48,7 +48,7 @@ export class AuthenticationService {
 				throw new Error();
 			}
 
-			const token = this.tokenService.generateAccessToken(user);
+			const token = this.tokenService.generateAccessToken(omit(['password'], user));
 			const refreshToken = this.tokenService.setRefreshToken(user.id);
 
 			return {

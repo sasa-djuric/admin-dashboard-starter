@@ -3,8 +3,8 @@ import { useRoutes } from 'react-router';
 import { http } from '@services';
 import Spinner from '@components/spinner';
 import { useAuth } from './hooks';
-import { useMockUser } from './mocks/use-mock-user';
 import { routesConfig } from './routes';
+import { useMockUser } from './mocks/use-mock-user';
 
 import './app.scss';
 
@@ -12,7 +12,6 @@ const App: React.FunctionComponent = ({ children }) => {
 	const routes = useRoutes(routesConfig);
 	const { authState, updateAuthState, refreshToken, logout } = useAuth();
 	const [isInited, setIsInited] = useState(false);
-	const isCheckingAuth = authState.isLoading && !isInited;
 
 	useEffect(() => {
 		updateAuthState();
@@ -26,12 +25,12 @@ const App: React.FunctionComponent = ({ children }) => {
 		http.addListener(http.Event.Unauthorized, logout);
 	}, []);
 
-	useMockUser();
+	// useMockUser();
 
 	return (
 		<div className='authentication-app'>
 			<Suspense fallback={<Spinner size='large' />}>
-				{isCheckingAuth ? <Spinner size='large' /> : authState.isAuth ? children : routes}
+				{!isInited ? <Spinner size='large' /> : authState.isAuth ? children : routes}
 			</Suspense>
 		</div>
 	);
