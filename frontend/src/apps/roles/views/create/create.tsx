@@ -10,6 +10,9 @@ import Spinner from '@components/spinner';
 // Containers
 import CreateUserForm from '../../forms/create';
 
+// Layout
+import { View } from '../../../../layout/view';
+
 // Hooks
 import { useAuth } from '@apps/authentication';
 
@@ -38,7 +41,7 @@ const RolesCreateView: React.FunctionComponent<CreateProps> = ({ isEditMode }) =
 	}
 
 	return (
-		<div>
+		<View>
 			<PageHeader
 				ghost={false}
 				title='Roles'
@@ -53,7 +56,7 @@ const RolesCreateView: React.FunctionComponent<CreateProps> = ({ isEditMode }) =
 					</Suspense>
 				</ErrorBoundary>
 			</Card>
-		</div>
+		</View>
 	);
 };
 

@@ -6,7 +6,7 @@ import { useRoutes } from 'react-router-dom';
 import Spinner from './components/spinner';
 import ErrorBoundary from './components/service-error-boundary';
 
-// Containers
+// Layout
 import Layout from './layout';
 
 import { routesConfig } from './routes';

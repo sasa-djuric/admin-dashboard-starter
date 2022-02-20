@@ -8,6 +8,9 @@ import Search from 'antd/lib/input/Search';
 import Protected from '@components/protected/protected';
 import confirm from '@components/confirm';
 
+// Layout
+import { View } from '../../../../layout/view';
+
 // Assets
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
@@ -152,7 +155,7 @@ const RolesMainView: FunctionComponent<RolesMainViewProps> = () => {
 	}
 
 	return (
-		<div>
+		<View>
 			<PageHeader
 				ghost={false}
 				title='Roles'
@@ -188,7 +191,7 @@ const RolesMainView: FunctionComponent<RolesMainViewProps> = () => {
 					loading={isLoading}
 				/>
 			</Card>
-		</div>
+		</View>
 	);
 };
 

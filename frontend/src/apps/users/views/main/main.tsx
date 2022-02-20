@@ -8,6 +8,9 @@ import Search from 'antd/lib/input/Search';
 import Protected from '@components/protected/protected';
 import confirm from '@components/confirm';
 
+// Layout
+import { View } from '../../../../layout/view';
+
 // Assets
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 
@@ -112,7 +115,7 @@ const UsersMainView: FunctionComponent<UsersMainViewProps> = () => {
 	}
 
 	return (
-		<div>
+		<View>
 			<PageHeader
 				ghost={false}
 				title='Users'
@@ -151,7 +154,7 @@ const UsersMainView: FunctionComponent<UsersMainViewProps> = () => {
 					onChange={handleTableChangeSort(setSort)}
 				/>
 			</Card>
-		</div>
+		</View>
 	);
 };
 
