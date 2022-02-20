@@ -12,13 +12,7 @@ export interface LoginResponse {
 }
 
 function login(data: LoginRequest) {
-	return http.post<LoginResponse>('/authentication/login', data).then(result => {
-		if (result.token) {
-			http.setToken(result.token);
-		}
-
-		return result;
-	});
+	return http.post<LoginResponse>('/authentication/login', data);
 }
 
 export interface ForgotPasswordRequest {

@@ -24,7 +24,7 @@ export const useAuth = () => {
 	async function login(token: string) {
 		try {
 			const { user } = jwtDecode<JWTPayload>(token);
-			http.setToken(token);
+			http.token = token;
 			localStorage.setItem('token', token);
 			actions.login(user);
 		} catch {
@@ -40,7 +40,7 @@ export const useAuth = () => {
 				const { user } = jwtDecode<JWTPayload>(token);
 
 				if (user) {
-					http.setToken(token);
+					http.token = token;
 					actions.login(user);
 				} else {
 					throw new Error();
@@ -66,7 +66,7 @@ export const useAuth = () => {
 	function logout() {
 		localStorage.removeItem('token');
 		queryClient.getQueryCache().clear();
-		http.removeToken();
+		http.token = null;
 		actions.logout();
 	}
 

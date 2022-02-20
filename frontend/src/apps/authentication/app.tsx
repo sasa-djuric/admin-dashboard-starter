@@ -16,13 +16,8 @@ const App: React.FunctionComponent = ({ children }) => {
 	useEffect(() => {
 		updateAuthState();
 		setIsInited(true);
-
-		http.addListener(http.Event.TokenRefresh, async () => {
-			const token = await refreshToken();
-			return token;
-		});
-
-		http.addListener(http.Event.Unauthorized, logout);
+		http.refreshTokenHandler = refreshToken;
+		http.onUnauthorized = logout;
 	}, []);
 
 	// useMockUser();

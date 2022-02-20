@@ -25,9 +25,9 @@ export class AuthenticationController {
 		response.cookie('refresh-token', refreshToken, {
 			sameSite: 'none',
 			httpOnly: true,
-			secure: process.env.NODE_ENV !== 'development',
+			secure: true,
 			expires: new Date(Date.now() + 6 * 30 * 24 * 60 * 60 * 1000),
-			domain: this.configService.get<ProjectConfig>('project').domain
+			domain: `.${this.configService.get<ProjectConfig>('project').domain}`
 		});
 
 		response.json(result);
